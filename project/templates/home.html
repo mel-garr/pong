@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main-home</title>
+    <style>
+        .login-send,
+        .signup-send,
+        .game-send
+        {
+        
+            display: none;
+        }
+        .blurred{
+            filter: blur(5px);
+            pointer-events: none;
+        }
+        .list_of_lists{
+            /* display: none; */
+            position: fixed; /* Position the game list in the center of the viewport */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 100; /* Ensure it appears above the blurred content */
+        }
+        .games_starter_pack{
+            display: none;
+        }
+        </style>
+</head>
+<body>
+    <div id="main-content" >
+
+        <navbar class="main-content-down">
+            <button class="go-to-game">play</button>
+            <button class="go-to-login">login</button>
+            <button class="go-to-signup">signup</button>
+        </navbar>
+        <navbar class="main-content-up">
+            <button class="go-to-game">play</button>
+            <button class="go-to-notification">notification</button>
+            <button class="go-to-profile">{{user.name}}</button>
+        </navbar>
+
+            <h1>Welcome to Pong Game Hub</h1>
+            <p>This is the ultimate place to play your favorite classic games.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor ligula nec cursus accumsan. 
+               Quisque consequat, sapien non congue fringilla, magna libero convallis orci, ut mollis lorem felis 
+               at risus. Integer at neque ultricies, facilisis erat sed, venenatis risus. Integer sit amet neque 
+               mauris. Vivamus vel volutpat eros. Fusce fringilla massa a mi malesuada, ac varius metus fermentum. 
+               Proin ut est nec libero fringilla posuere non vel velit. Donec tristique tincidunt purus non ornare. 
+               Nullam at eros id odio laoreet interdum. Integer sit amet libero sed libero malesuada egestas. 
+               Vivamus dignissim risus eget nisl vehicula, ac posuere lorem vulputate. Proin vel ultricies urna, 
+               at blandit sapien. Pellentesque id lectus eu nulla fermentum accumsan. Cras commodo tempor orci, 
+               non commodo metus accumsan in. Curabitur nec ornare sapien, et bibendum tortor.</p>
+            <p>Nam a felis non velit lacinia congue a eu lorem. Fusce euismod, erat nec dictum aliquam, ante ex 
+               fermentum lorem, at laoreet odio enim sit amet ligula. Suspendisse id ligula a nibh ultricies 
+               ultricies. Quisque pharetra arcu ut auctor vehicula. Cras lobortis sollicitudin elit, eu dictum 
+               sapien sagittis eu. Integer fringilla feugiat massa, id elementum est fringilla nec. Nulla sed 
+               gravida elit. Nam ut augue scelerisque, fringilla nisl sed, hendrerit lacus.</p>
+            <p>Etiam accumsan fermentum diam, vitae faucibus mi pretium a. Donec vel turpis eros. Curabitur nec 
+               mauris tincidunt, eleifend arcu nec, eleifend leo. Pellentesque auctor dolor id dignissim facilisis. 
+               Quisque nec dolor id urna fermentum bibendum non nec odio. Cras efficitur massa a metus pretium 
+               feugiat. Donec eget risus ultricies, posuere leo non, fringilla orci. Etiam at consectetur neque, 
+               id finibus arcu. Proin et vestibulum ligula. Suspendisse dictum, libero in dictum porttitor, 
+               mauris turpis dictum nisi, sit amet condimentum metus ex eu enim. Donec fringilla sagittis magna, 
+               nec auctor erat. Pellentesque et vulputate metus, sit amet varius risus.</p>
+            <!-- Add more paragraphs to simulate a lot of content -->
+            <p>...</p> <!-- Repeated paragraphs to create a lengthy page -->      
+    </div>
+    <div id="game-page" class="game-send list_of_lists">
+        <div class="pick_a_game">
+            <!-- hna anpicki lgame -->
+             pick a game : </br>
+            <button class="game-pong-modes">Pong</button>
+            <button>game2</button>
+            <button class="go-back-home">go Back</button>
+        </div>
+        <div class="games_starter_pack game_pick_mode_pong">
+            <!-- for pong -->
+            pick a mode : </br>
+            <button class="pick_solo"> Solo AI </button>
+            <button class="pick_lmulti">multi local</button>
+            <button class="pick_omulti">multi Online</button>
+            <button class="pick_tournament">Tournament</button>
+            <button class="go_back_main_pong">GO back</button>
+        </div>
+        <div class="games_starter_pack game_pong_mode_solo" >
+            <!-- solo AI -->
+            <button class="go-back-pong">GO back</button>
+        </div>
+        <div class="games_starter_pack game_pong_mode_Mlocal">
+            <!-- multi-local -->
+             <button class="play-pong-local">Start game</button>
+            <button class="go-back-pong">GO back</button>
+        </div>
+        <div class="games_starter_pack game_pong_mode_Monline">
+            <!-- multi-online -->
+            <button class="go-back-pong">GO back</button>
+        </div>
+        <div class="games_starter_pack game_pong_mode_tournament">
+            <!-- Tournament -->
+            <button class="go-back-pong">GO back</button>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.play-pong-local').onclick = function(){
+            sessionStorage.setItem('selectedGame', 'pong');
+            sessionStorage.setItem('selectedMode', 'Challenge');
+            window.location = '/game/lobby/';
+        }
+    </script>
+
+    <script>
+        document.querySelector('.game-pong-modes').onclick = function(){
+            document.querySelector('.pick_a_game').style.display = 'none';
+            document.querySelector('.game_pick_mode_pong').style.display = 'block';
+            
+        }
+        document.querySelectorAll('.go-back-pong').forEach(button =>{
+            button.addEventListener('click', function(){
+                document.querySelector('.game_pong_mode_solo').style.display = 'none';
+                document.querySelector('.game_pong_mode_Mlocal').style.display = 'none';
+                document.querySelector('.game_pong_mode_Monline').style.display = 'none';
+                document.querySelector('.game_pong_mode_tournament').style.display = 'none';
+                document.querySelector('.game_pick_mode_pong').style.display = 'block';
+            });
+        });
+
+        document.querySelector('.go_back_main_pong').onclick = function() {
+            document.querySelector('.pick_a_game').style.display = 'block';
+            document.querySelector('.game_pick_mode_pong').style.display = 'none';
+        };
+
+        document.querySelector('.pick_solo').onclick = function() {
+            document.querySelector('.game_pong_mode_solo').style.display = 'block';
+            document.querySelector('.game_pick_mode_pong').style.display = 'none';
+        };
+
+        document.querySelector('.pick_lmulti').onclick = function() {
+            document.querySelector('.game_pong_mode_Mlocal').style.display = 'block';
+            document.querySelector('.game_pick_mode_pong').style.display = 'none';
+        };
+
+        document.querySelector('.pick_omulti').onclick = function() {
+            document.querySelector('.game_pong_mode_Monline').style.display = 'block';
+            document.querySelector('.game_pick_mode_pong').style.display = 'none';
+        };
+
+        document.querySelector('.pick_tournament').onclick = function() {
+            document.querySelector('.game_pong_mode_tournament').style.display = 'block';
+            document.querySelector('.game_pick_mode_pong').style.display = 'none';
+        };
+
+
+    </script>
+
+    <div id="login-page" class="login-send list_of_lists">
+        <input type="text"  id="login-page-login"></br>
+        <input type="text"  id="login-page-password"></br>
+        <button class="login-validate">let's go</button>
+        <button class="go-to-signup">signup</button>
+        <button class="go-back-home">go Back</button>
+    </div>
+    <div id="signup-page" class="signup-send list_of_lists">
+        <input type="text" value="login" id="signup-page-sign"></br>
+        <input type="text" value="password" id="signup-page-password"></br>
+        <input type="text" value="password" id="signup-page-password2"></br>
+        <button class="go-to-login">login</button>
+        <button class="go-back-home">go back</button>
+    </div>
+    <script>
+        window.csrfToken = "{{ csrf_token }}";
+        document.querySelector('#login-page-login').onkeyup = function(e){
+            if (e.key == 'Enter'){
+                document.querySelector('#login-page-password').focus();
+            }
+        };
+        document.querySelector('#login-page-password').onkeyup = function(e){
+            if (e.key == 'Enter' ){
+                let loginValue = document.querySelector('#login-page-login').value;
+                if (loginValue){
+                    console.log('yoo')
+                    document.querySelector('.login-validate').click();
+                } else {
+                alert ('fill login 2 pls');}
+            }
+        };
+        document.querySelector('.login-validate').onclick = function(){
+            let LoginId = document.querySelector('#login-page-login').value;
+            let LoginPass = document.querySelector('#login-page-password').value;
+            if (LoginId && LoginPass){
+                fetch('/game/login/',{
+                    method : 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json',
+                        'X-CSRFToken'  : getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({LoginId: LoginId, password: LoginPass})
+                })
+                .then (response => {
+                    if (!response.ok){
+                        throw new Error ('Network response makaynach');
+                    }
+                    return response.json();
+                })
+                .then (data => {
+                    if (data.success){
+                        console.log('jit hnaya')
+                        window.location = '/game/home/';
+                    }else {
+                        alert ('Invalid Login or Password');
+                        document.querySelector('#login-page-login').focus()
+                    }
+                }) 
+                    .catch(error => {
+                        console.log('error ssadi9i f login:', error);
+                    })
+            }else{
+                alert('please enter both login and password !!')
+            }
+        }
+
+        function getCookie(name){
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== ''){
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++){
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')){
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue ;
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            fetch('/auth-status/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.is_logged_in);
+                let isLoggidIn = data.is_logged_in;
+                if (isLoggidIn){
+                    document.querySelector('.main-content-up').style.display = 'block';
+                    document.querySelector('.main-content-down').style.display = 'none';
+                }else{
+                    document.querySelector('.main-content-down').style.display = 'block';
+                    document.querySelector('.main-content-up').style.display = 'none';
+                }
+            })
+        });
+        document.querySelectorAll('.go-back-home').forEach(button =>{
+            button.addEventListener('click', function(){
+                document.querySelector('#main-content').classList.remove('blurred');
+                document.querySelector('#game-page').style.display = 'none';
+                document.querySelector('#login-page').style.display = 'none';
+                document.querySelector('#signup-page').style.display = 'none';
+            });
+        });
+        document.querySelectorAll('.go-to-login').forEach(button => {
+            button.addEventListener('click', function(){
+                document.querySelector('#main-content').classList.add('blurred');
+                document.querySelector('#game-page').style.display = 'none';
+                document.querySelector('#login-page').style.display = 'block';
+                document.querySelector('#signup-page').style.display = 'none';
+                document.querySelector('#login-page-login').focus();
+            });
+        });
+
+        document.querySelectorAll('.go-to-game').forEach(button => {
+            button.addEventListener('click', function(){
+                document.querySelector('#main-content').classList.add('blurred');
+                document.querySelector('#game-page').style.display = 'block';
+                document.querySelector('#login-page').style.display = 'none';
+                document.querySelector('#signup-page').style.display = 'none';
+            });
+        });
+
+        document.querySelectorAll('.go-to-signup').forEach(button => {
+            button.addEventListener('click', function(){
+                document.querySelector('#main-content').classList.add('blurred');
+                document.querySelector('#game-page').style.display = 'none';
+                document.querySelector('#login-page').style.display = 'none';
+                document.querySelector('#signup-page').style.display = 'block';
+            });
+        });
+
+        function getCookie(name){
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== ''){
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++){
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')){
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue ;
+        }
+    </script>
+</body>
+</html>
+
+
