@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>multi-online</title>
+    
+</head>
+<body>
+    Lobby </br>
+    {{user.name}}
+
+    <!-- <button>Invite others players ?</button> -->
+    <button class="lanch_off_multi">Start a game</button>
+    <!-- print player stats ? -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const game = sessionStorage.getItem('selectedGame');
+            const mode = sessionStorage.getItem('selectedMode');
+        });
+        document.querySelector('.lanch_off_multi').onclick = function(){
+            window.location = '/game/onmulti/';
+        };
+    </script>
+</body>
+</html>

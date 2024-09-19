@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline-multiplayer</title>
+    <style>
+ 
+        body{
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+        #gamecanvas {
+            border : 1px black solid;
+            background-color: grey;
+        }
+    </style>
+</head>
+<body>
+    <p>Left team score :</p>
+    <p>Right team score :</p>
+    <canvas id="gamecanvas"></canvas>
+    <script type="module">
+        import { Ball } from '{% static "scripts/ball.js" %}';
+        import { Player } from '{% static "scripts/player.js" %}';
+        import { Field } from '{% static "scripts/field.js" %}';
+        function initializeGame() {
+            const canvas = document.querySelector('#gamecanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth * 0.8;
+            canvas.height = window.innerHeight * 0.8;
+            let wi = canvas.width;
+            let hi = canvas.height;
+            let boll = new Ball(wi /2,hi/2, hi ,wi);
+            let P1 = new Player( wi / 80, hi / 2.5, wi / 40, hi / 5,hi, wi);
+            let P2 = new Player( wi - (wi / 80 + wi / 40), hi / 2.5, wi / 40, hi / 5,hi, wi, 'ArrowUp', 'ArrowDown');
+            let field = new Field([P1], [P2]);
+            return {
+                canvas,
+                ctx,
+                wi,
+                hi,
+                field,
+                P1,
+                P2,
+                boll
+            };
+        }
+        let game_state = 'PLAY';
+        let readyTimeout = null;
+
+        const { canvas, ctx, wi, hi, field, P1, P2, boll} = initializeGame();
+        let last_score = 'right';
+        
+
+        function update(){
+            if (field.isGameOver()){
+                game_state = 'GAME_OVER';
+                const winner = field.getWinner();
+                console.log('Game Over! Winner: ${winner}');
+                return;
+            }
+            if (game_state == 'PLAY'){
+                P1.update();
+                P2.update();
+                boll.update([P1, P2]);
+                if (boll.scored()){
+                    if (boll.ls === 'left'){
+                        field.increaseScore('blue');
+                        last_score = 'left';
+                    }else if (boll.ls === 'right'){
+                        field.increaseScore('red');
+                        last_score = 'right';
+                    }
+                    boll.reset();
+                    game_state = 'READY';
+                    handleReadyState();
+            }
+        }}
+
+        function handleReadyState(){
+            last_score === 'left' ? 'red' : 'blue';
+            readyTimeout = setTimeout(() =>{
+                game_state = 'PLAY';
+            }, 5000);
+            document.addEventListener('keydown', hendlekeyown);
+        }
+
+        function hendlekeyown(event){
+            if (event.code === 'Space' && game_state === 'READY'){
+                clearTimeout(readyTimeout);
+                game_state = 'PLAY';
+            }
+        }
+
+        function render(){
+            ctx.clearRect(0, 0, wi, hi);
+            P1.draw(ctx);
+            P2.draw(ctx);
+            boll.draw(ctx);
+
+        }
+
+        function game(){
+            update()
+            render();
+        }
+        let fps = 50;
+
+        setInterval (game, 1000 / fps)
+        </script>
+</body>
+</html>
+

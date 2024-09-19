@@ -1,0 +1,13 @@
+-->home page<---
+main-home-content : home-page
+main-game-content  : game-page
+main-login-content  : login-page
+
+go to the game content : go-to-game
+go to login content : go-to-login
+go to singup content : go-to-signup
+
+-->main-login-page<--
+
+
+-->main-game-page<--
