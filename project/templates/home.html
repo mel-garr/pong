@@ -28,7 +28,9 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             z-index: 100; /* Ensure it appears above the blurred content */
         }
-        .games_starter_pack{
+        .games_starter_pack,
+        .online-jjoin
+        {
             display: none;
         }
         </style>
@@ -101,7 +103,13 @@
         </div>
         <div class="games_starter_pack game_pong_mode_Monline">
             <!-- multi-online -->
-            <button class="play-pong-online">Start game</button>
+            <!-- <button class="play-pong-online">Start game</button> -->
+            <button class="pong-online-new-game">newGame</button>
+            <button class="pong-online-join-game">join</button>
+            <div class="online-jjoin">
+                <input type="text" width="500" class="pong-online-name-room" placeholder="Room name">
+                <button class="pong-online-join-game-check">go!!</button>
+            </div>
             <button class="go-back-pong">GO back</button>
         </div>
         <div class="games_starter_pack game_pong_mode_tournament">
@@ -109,6 +117,9 @@
             <button class="go-back-pong">GO back</button>
         </div>
     </div>
+    <script>
+
+    </script>
 
     <script>
         document.querySelector('.play-pong-local').onclick = function(){
@@ -116,10 +127,40 @@
             sessionStorage.setItem('selectedMode', 'Challenge');
             window.location = '/game/lobby/';
         }
-        document.querySelector('.play-pong-online').onclick = function(){
-            sessionStorage.setItem('selectedGame', 'pong');
-            sessionStorage.setItem('selectedMode', 'multiOn');
-            window.location = '/game/lobby2/';
+        document.querySelector('.pong-online-join-game').onclick = function(){
+            document.querySelector('.online-jjoin').style.display ='block';
+            document.querySelector('.pong-online-name-room').focus();
+        }
+
+        document.querySelector('.pong-online-new-game').onclick = function(){
+            fetch('/creat_new_room/',{
+                method : 'POST',
+                headers : {
+                    'Content-Type': 'applcation/json',
+                    'X-CSRFToken' : getCookie('csrftoken')
+                },
+                body : JSON.stringify({})
+            })
+            .then (console.log('ja hna'))
+        }
+        // document.querySelector('.play-pong-online').onclick = function(){
+        //     sessionStorage.setItem('selectedGame', 'pong');
+        //     sessionStorage.setItem('selectedMode', 'multiOn');
+        //     window.location = '/game/lobby2/';
+        // }
+        function getCookie(name){
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== ''){
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++){
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')){
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue ;
         }
     </script>
 

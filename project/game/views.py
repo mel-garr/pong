@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.http import JsonResponse, HttpResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 # Create your views here.
 
@@ -72,23 +73,49 @@ def login(request):
     return render(request, '/home.html')
 
     
-def lobby2(request):
-    context = {}
-    try :
-        user_id = request.session.get('user_id')
-        if user_id:
-            user = UserL.objects.get(id=user_id)
-            context = {'user': user}
-        else:
-            context = {}
-    except:
-            context ={}
-    return render(request, 'game/lobby2.html', context)
 
     
 def offmulti(request):
     return render(request, 'game/offmulti.html')
 
-    
+# ---------------------------------------------------
+
 def onmulti(request):
     return render(request, 'game/onmulti.html')
+# def lobby2(request):
+#     context = {}
+#     try :
+#         user_id = request.session.get('user_id')
+#         if user_id:
+#             user = UserL.objects.get(id=user_id)
+#             context = {'user': user}
+#         else:
+#             context = {}
+#     except:
+#             context ={}
+#     return render(request, 'game/lobby2.html', context)
+    
+
+def creat_new_room(request):
+    if request.method == 'POST':
+        room = RoomL.objects.create(
+            name = f"Room_{timezone.now().strftime('%Y%m%d%H%M%S')}",
+            playerNbr=2,
+            type = 'multiOn',
+        )
+        nuser = UserL.objects.get(UserL, id = request.user.id)
+        print ('hadi print li dert: ', nuser)
+        room.players.add(nuser)
+        room.save()
+
+        return redirect('room_detail', room_name= room.name)
+    return HttpResponse({'error':'invalid request'}, status=400)
+
+# def room_detail(request, room_name):
+#     room = get_object_or_404(RoomL, name=room_name)
+
+#     return render(request, 'lobby2.html', {'room': room})
+
+
+
+# ---------------------------------------------------
