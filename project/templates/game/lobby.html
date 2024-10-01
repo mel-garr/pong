@@ -4,23 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby</title>
-    
+    <style>
+         .players {
+            display: flex;
+         }
+
+         .player1, 
+         .player2 {
+            width: 50%;
+            display: block;
+            border: solid 5px;
+         }
+
+    </style>
+
 </head>
 <body>
-    Lobby </br>
-    {{user.name}}
+    <div class="players">
 
-    <!-- <button>Invite others players ?</button> -->
-    <button class="lanch_off_multi">Start a game</button>
-    <!-- print player stats ? -->
+        <template id="player-options-template">
+            <option value="default">default</option>
+            <option value="type1">type1</option>
+            <option value="type2">type2</option>
+        </template>
+
+        <div class="player1">
+            <div>player1 data</div>
+            <input class="nicnamep1" placeholder="nickname" required><br>
+            <select class="paddlep1" ></select><br>
+            <select class="fieldp1" ></select><br>
+            <select class="ballp1" ></select><br>
+        </div>
+        <div class="player2">
+            <div>player2 data</div>
+            <input class="nicnamep2" placeholder="nickname" required><br>
+            <select class="paddlep2" ></select><br>
+            <select class="fieldp2" ></select><br>
+            <select class="ballp2" ></select><br>
+        </div>
+
+    </div>
+    
+<button class="lanch_off_multi">Start a game</button>
+   
+    <script>
+    const template = document.getElementById('player-options-template');
+    const selectElements = document.querySelectorAll('select');
+
+    selectElements.forEach(select => {
+        const options = template.content.cloneNode(true);
+        select.appendChild(options);
+    });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function(){
             const game = sessionStorage.getItem('selectedGame');
             const mode = sessionStorage.getItem('selectedMode');
         });
         document.querySelector('.lanch_off_multi').onclick = function(){
+            let p1nickname = document.querySelector('.nicnamep1').value;
+            let p1paddle = document.querySelector('.paddlep1').value;
+            let p1field = document.querySelector('.fieldp1').value;
+            let p1ball = document.querySelector('.ballp1').value;
+            let p2nickname = document.querySelector('.nicnamep2').value;
+            let p2paddle = document.querySelector('.paddlep2').value;
+            let p2field = document.querySelector('.fieldp2').value;
+            let p2ball = document.querySelector('.ballp2').value;
+            fetch('/game/setuplobbyoff/',{
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                    'X-CSRFToken'  : getCookie('csrftoken'),
+                },
+                body : JSON.stringify({
+                    p1paddle: p1paddle, p1nickname: p1nickname, p1field:p1field,p1ball:p1ball,
+                    p2paddle: p2paddle, p2nickname: p2nickname, p2field:p2field,p2ball:p2ball, 
+                }),
+            })
+            then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json(); // Assuming your Django view returns a JSON response
+})
+            .then (console.log('zesh'));
             window.location = '/game/offmulti/';
         };
+
+        function getCookie(name){
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== ''){
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++){
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')){
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue ;
+        }
     </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,8 +33,8 @@
 <body>
     <canvas id="gamecanvas"></canvas>
     <script type="module">
-        import { Ball } from '../scripts/ball.js';
-        import { Player } from '../scripts/player.js';
+        import { Ball } from "{% static 'js/ball.js' %}";
+        import { Player } from "{% static 'js/player.js' %}";
         // import { Field } from '../scripts/field.js';
 
 
@@ -86,112 +87,3 @@
         </script>
 </body>
 </html>
-
-<!-- // document.addEventListener('keydown' , function(event){
-//     if (event.key == 'w' || event.key == 'W'){
-//         P1.dy = -5;
-//     }
-//     else if (event.key == 's' || event.key == 'S'){
-//         P1.dy = 5;
-//     }
-//     if (event.key == 'ArrowUp'){
-//         P2.dy = -5;
-//     }
-//     else if (event.key == 'ArrowDown'){
-//         P2.dy = 5;
-//     }
-// });
-
-// document.addEventListener('keyup' , function(event){
-//     if (event.key == 'w' || event.key == 'W' || event.key == 's' || event.key == 'S'){
-//         P1.dy = 0;
-//     }
-//     if (event.key == 'ArrowUp' || event.key == 'ArrowDown'){
-//         P2.dy = 0;
-//     }
-
-// }); -->
-
-<!-- // let Player1 = {
-//     x : wi / 80,
-//     y : canvas.height / 3,
-//     width : canvas.width / 40,
-//     height : canvas.height / 5,
-//     color : '#000000',
-// };
-
-// let Player2 = {
-//     width : canvas.width / 40,
-//     height : canvas.height / 5,
-//     y : canvas.height / 3,
-//     x : canvas.width - (canvas.width / 80 + canvas.width / 40),
-//     color : '#FFFFFF',
-// };
-
-// let ball = {
-//     width : canvas.width / 40,
-//     height : canvas.width / 40,
-//     y : canvas.height / 2,
-//     x : canvas.width / 2,
-//     color : '#FF0000',
-// };
-
-// let keys = {
-//     'ArrowUp': false,
-//     'ArrowDown': false,
-//     'w': false,
-//     's': false
-// };
-
-// function updateGame(){
-//     if (keys['ArrowUp']) {
-//         Player2.y -= 10;
-//     }
-//     if (keys['ArrowDown']) {
-//         Player2.y += 10;
-//     }
-//     if (keys['w']) {
-//         Player1.y -= 10;
-//     }
-//     if (keys['s']) {
-//         Player1.y += 10;
-//     }
-// }
-
-// function drawGame(){
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     ctx.fillStyle = Player1.color;
-//     ctx.fillRect(Player1.x, Player1.y, Player1.width, Player1.height);
-//     ctx.fillStyle = Player2.color;
-//     ctx.fillRect(Player2.x, Player2.y, Player2.width, Player2.height);
-//     ctx.fillStyle = ball.color;
-//     ctx.beginPath();
-//     ctx.arc(ball.x, ball.y, ball.height, 0, 2* Math.PI);
-//     ctx.fillStyle = ball.color;
-//     ctx.fill();
-//     ctx.closePath();
-// }
-
-
-
-// function handleKeyDown(event){
-//     if (keys.hasOwnProperty(event.key)){
-//         keys[event.key] = true;
-//     }
-// }
-
-// function handleKeyUp(event){
-//     if (keys.hasOwnProperty(event.key)){
-//         keys[event.key] = false;
-//     }
-// }
-
-// function gameloop(){
-//     updateGame();
-//     drawGame();
-//     requestAnimationFrame(gameloop);
-// }
-
-// gameloop();
-// document.addEventListener('keydown', handleKeyDown);
-// document.addEventListener('keyup', handleKeyUp);; -->

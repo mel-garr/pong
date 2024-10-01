@@ -85,3 +85,10 @@ def login(request):
     
 def offmulti(request):
     return render(request, 'game/offmulti.html')
+
+
+def setuplobbyoff(request):
+    print ('yo')
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print (data)

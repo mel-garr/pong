@@ -8,7 +8,7 @@ urlpatterns = [
     path('login/', login, name='loginO'),
     path('lobby/', lobby, name='lobby'),
     path('offmulti/', offmulti, name='offmulti'),
-
+    path('setuplobbyoff/', setuplobbyoff, name='setuplobbyoff'),
 
     # path('login3/', login3, name='login3'),
 ]
