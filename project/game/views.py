@@ -130,5 +130,12 @@ def setuplobbyoff(request):
     return JsonResponse({'status': 'not ok'}, status=405)
             
 def offmulti_view(request, room_id):
-    room = get_object_or_404(roomData, id=room_id)
-    return render(request, 'game/offmulti.html', {'room' : room})
+    try :
+        room = get_object_or_404(roomData, id=room_id)
+        # if room :
+
+        return render(request, 'game/offmulti.html', {'room' : room})
+    except Exception as e :
+        return JsonResponse({'status':'errro', 'message':str(e)}, status=500)
+    
+    return JsonResponse({'status': 'not ok'}, status=405) 
