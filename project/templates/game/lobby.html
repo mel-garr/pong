@@ -31,17 +31,18 @@
         <div class="player1">
             <div>player1 data</div>
             <input class="nicnamep1" placeholder="nickname" required><br>
-            <select class="paddlep1" ></select><br>
-            <select class="fieldp1" ></select><br>
-            <select class="ballp1" ></select><br>
+            paddle<select class="paddlep1" ></select><br>
+            field<select class="fieldp1" ></select><br>
+            ball<select class="ballp1" ></select><br>
         </div>
         <div class="player2">
             <div>player2 data</div>
             <input class="nicnamep2" placeholder="nickname" required><br>
-            <select class="paddlep2" ></select><br>
-            <select class="fieldp2" ></select><br>
-            <select class="ballp2" ></select><br>
+            paddle<select class="paddlep2" ></select><br>
+            field<select class="fieldp2" ></select><br>
+            ball<select class="ballp2" ></select><br>
         </div>
+        <div id="error-message" style="color: red;"></div>
 
     </div>
     
@@ -81,14 +82,28 @@
                     p2paddle: p2paddle, p2nickname: p2nickname, p2field:p2field,p2ball:p2ball, 
                 }),
             })
-            then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json(); // Assuming your Django view returns a JSON response
-})
-            .then (console.log('zesh'));
-            window.location = '/game/offmulti/';
+            .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error('Network response was not ok');
+                });
+            }
+            return response.json(); 
+        })
+            .then( data => {
+    
+                // console.log(data.room_id);
+                // let rooma = data.room_id 
+                if (data.status === 'Lobby created ok'){
+                    window.location = `/${data.room_id}/`;
+                } else{
+                    document.getElementById('error-message').innerText = 'Please fill in all fields correctly';
+                }
+            })
+            .catch (error =>{
+                console.error('Error:', error);
+                document.getElementById('error-message').innerText = error.message;
+            })
         };
 
         function getCookie(name){

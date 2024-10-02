@@ -62,7 +62,9 @@ class playerData(models.Model):
     
 
     def __str__(self):
-        return self.name
+        return str(self.id)
+
+        
 
 
 class roomData(models.Model):
@@ -89,16 +91,16 @@ class roomData(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
     uniq_id = models.CharField(max_length=50, blank=True, null=True)
     gametype = models.CharField(max_length=10, choices = room_type ,default='offline')
-    gamestatue = models.CharField(max_length=10, choices = status_choice ,default='gamestart')
+    gamestatus = models.CharField(max_length=10, choices = status_choice ,default='gamestart')
     winning_team = models.CharField(max_length=10, choices = team ,default='tie')
     max_score = models.IntegerField(default=2)
 
-    redteamScore = models.IntegerField(default=0)
     redteamplayers = models.ManyToManyField(playerData, related_name='red_team')
+    redteamScore = models.IntegerField(default=0)
 
-    blueteamScore = models.IntegerField(default=0)
     blueteamplayers = models.ManyToManyField(playerData, related_name='blue_team')
+    blueteamScore = models.IntegerField(default=0)
     
 
     def __str__(self):
-        return self.name
+        return str(self.id)

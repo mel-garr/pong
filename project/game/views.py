@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 from django.http import JsonResponse, HttpResponse
 import json
@@ -83,12 +83,52 @@ def login(request):
 
 #         return 
     
-def offmulti(request):
-    return render(request, 'game/offmulti.html')
+# def offmulti(request):
+#     return render(request, 'game/offmulti.html')
 
 
 def setuplobbyoff(request):
-    print ('yo')
     if request.method == 'POST':
-        data = json.loads(request.body)
-        print (data)
+        try :
+            data = json.loads(request.body)
+            # print (data)
+            required_fields = ['p1nickname', 'p1paddle', 'p1ball', 'p1field', 
+                            'p2nickname', 'p2paddle', 'p2ball', 'p2field']
+            if not all(data.get(field) for  field in required_fields):
+                return JsonResponse({'status': 'missing fields'}, status=400)
+            P1 = playerData(
+                name = data['p1nickname'],
+                paddle = data['p1paddle'],
+                ball = data['p1ball'],
+                field = data['p1field'],
+            )
+            P2 = playerData(
+                name = data['p2nickname'],
+                paddle = data['p2paddle'],
+                ball = data['p2ball'],
+                field = data['p2field'],
+            )
+            P1.save()
+            P2.save()
+            party = roomData(
+                name = 'Defi',
+                gametype = 'Challenge',
+                gamestatus = 'gamestart',
+            )
+            party.save()
+            party.redteamplayers.add(P1)
+            party.redteamplayers.add(P2)
+
+            party.blueteamplayers.add(P2)
+            party.save()
+            print (party.id)
+            return JsonResponse({'status' : 'Lobby created ok', 'room_id': party.id}, status=201)
+        except json.JSONDecodeError:
+            return JsonResponse({'status' : 'invlaid JSON'}, status=400)
+        except Exception as e :
+            return JsonResponse({'status':'error', 'message':str(e)}, status=500)
+    return JsonResponse({'status': 'not ok'}, status=405)
+            
+def offmulti_view(request, room_id):
+    room = get_object_or_404(roomData, id=room_id)
+    return render(request, 'game/offmulti.html', {'room' : room})

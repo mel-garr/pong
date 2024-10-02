@@ -23,8 +23,8 @@
         }
         #gamecanvas {
       
-            /* height: 600px;
-            width: 800px; */
+            height: 600px;
+            width: 800px;
             border : 1px black solid;
             background-color: grey;
         }
@@ -35,14 +35,14 @@
     <script type="module">
         import { Ball } from "{% static 'js/ball.js' %}";
         import { Player } from "{% static 'js/player.js' %}";
-        // import { Field } from '../scripts/field.js';
+        import { Field } from "{% static 'js/field.js' %}";
 
 
         function initializeGame() {
             const canvas = document.querySelector('#gamecanvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth * 0.8;
-            canvas.height = window.innerHeight * 0.8;
+            canvas.width = 800;
+            canvas.height = 600;
             return {
                 canvas,
                 ctx,
