@@ -3,6 +3,7 @@ from .models import *
 from django.http import JsonResponse, HttpResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
+from .game_objects.pgame import *
 
 # Create your views here.
 
@@ -71,21 +72,6 @@ def login(request):
     
     return render(request, '/home.html')
 
-    
-
-# def pick_mode(request):
-#     if request.method == 'POST':
-#         game_type = request.POST.get('game_type')
-#         mode = request.POST.get('mode')
-
-#         request.session['game_type'] = game_type
-#         request.session['mode'] = mode
-
-#         return 
-    
-# def offmulti(request):
-#     return render(request, 'game/offmulti.html')
-
 
 def setuplobbyoff(request):
     if request.method == 'POST':
@@ -117,11 +103,9 @@ def setuplobbyoff(request):
             )
             party.save()
             party.redteamplayers.add(P1)
-            party.redteamplayers.add(P2)
-
             party.blueteamplayers.add(P2)
             party.save()
-            print (party.id)
+            # print (party.id)
             return JsonResponse({'status' : 'Lobby created ok', 'room_id': party.id}, status=201)
         except json.JSONDecodeError:
             return JsonResponse({'status' : 'invlaid JSON'}, status=400)
@@ -132,7 +116,10 @@ def setuplobbyoff(request):
 def offmulti_view(request, room_id):
     try :
         room = get_object_or_404(roomData, id=room_id)
-        # if room :
+        if room :
+            game = Game(room)
+            game.start_game()
+
 
         return render(request, 'game/offmulti.html', {'room' : room})
     except Exception as e :

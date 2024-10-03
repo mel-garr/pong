@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 
-class gameComsumer(WebsocketConsumer):
+class gameConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
 

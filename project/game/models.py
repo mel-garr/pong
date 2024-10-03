@@ -54,12 +54,17 @@ class playerData(models.Model):
     ('type2', 'Type 2'),
     ]
 
+#    team = [
+#     ('none', 'None'),
+#     ('blue', 'Blue'),
+#     ('red', 'Red'),
+#     ]
     name = models.CharField(max_length=50, blank=False, null=False)
     uniq_id = models.CharField(max_length=50, blank=True, null=True) # in case of online games ignore it for the moment
     paddle = models.CharField(max_length=50, choices= paddle_type, default='default')
     ball = models.CharField(max_length=50, choices= ball_type, default='default')
     field = models.CharField(max_length=50, choices= field_type, default='default')
-    
+    # team = models.CharField(max_length=10, choices = team ,default='none')
 
     def __str__(self):
         return str(self.id)

@@ -1,89 +1,54 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline-multiplayer</title>
-    <style>
- 
-        body{
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
+    <title>Multiplayer Game</title>
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            
-        }
-        #gamecanvas {
-      
-            height: 600px;
-            width: 800px;
-            border : 1px black solid;
-            background-color: grey;
-        }
-    </style>
 </head>
 <body>
-    <canvas id="gamecanvas"></canvas>
-    <script type="module">
-        import { Ball } from "{% static 'js/ball.js' %}";
-        import { Player } from "{% static 'js/player.js' %}";
-        import { Field } from "{% static 'js/field.js' %}";
+    <h1>Welcome to the game room: {{ room.name }}</h1>
+    <p>Room ID: {{ room.id }}</p>
+
+    <input type="text" id="messageInput" placeholder="Type a message" />
+    <button onclick="sendMessage()">Send Message</button>
 
 
-        function initializeGame() {
-            const canvas = document.querySelector('#gamecanvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 800;
-            canvas.height = 600;
-            return {
-                canvas,
-                ctx,
-                wi: canvas.width,
-                hi: canvas.height
-            };
+    
+    <script type="text/javascript">
+        const roomId = "{{ room.id }}";  // From the view context
+        console.log("Room ID:", roomId);
+        const socket = new WebSocket(`ws://${window.location.host}/ws/${roomId}/`);
+
+        // Handle incoming messages
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log("Message from server:", data.message);
+            // You can handle the game state update here
+        };
+
+        // When the WebSocket connection is opened
+        socket.onopen = function(event) {
+            console.log("WebSocket is open now.");
+            // Optionally, you can send a message to the server to initialize game state
+            socket.send(JSON.stringify({ 'message': 'Player connected!' }));
+        };
+
+        // When the WebSocket connection is closed
+        socket.onclose = function(event) {
+            console.log("WebSocket is closed.");
+        };
+
+        // Handle errors
+        socket.onerror = function(error) {
+            console.error("WebSocket error observed:", error);
+        };
+
+        // Function to send messages to the server
+        function sendMessage() {
+            const message = document.getElementById("messageInput").value;
+            socket.send(JSON.stringify({ 'message': message }));
         }
-        let game_state = 'PLAY';
-
-        const { canvas, ctx, wi, hi } = initializeGame();
-        let boll = new Ball(wi /2,hi/2, hi ,wi);
-        let P1 = new Player( wi / 80, hi / 2.5, wi / 40, hi / 5,hi, wi);
-        let P2 = new Player( wi - (wi / 80 + wi / 40), hi / 2.5, wi / 40, hi / 5,hi, wi, 'ArrowUp', 'ArrowDown');
-        // let map = new Field();
-        
-
-        function update(){
-
-            // if (boll.x + boll.radius < 0)
-
-            if (game_state == 'PLAY'){
-                P1.update();
-                P2.update();
-                boll.update([P1, P2]);
-            }
-        }
-
-        function render(){
-            ctx.clearRect(0, 0, wi, hi);
-            P1.draw(ctx);
-            P2.draw(ctx);
-            boll.draw(ctx);
-        }
-
-        function game(){
-            update()
-            render();
-        }
-        let fps = 50;
-
-        setInterval (game, 1000 / fps)
-        </script>
+    </script>
 </body>
 </html>
