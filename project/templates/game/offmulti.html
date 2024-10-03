@@ -12,7 +12,9 @@
 
     <input type="text" id="messageInput" placeholder="Type a message" />
     <button onclick="sendMessage()">Send Message</button>
-
+    {% for player in game.redteamplayers %}
+        print ('{{player.name}})
+    {% endfor %}
 
     
     <script type="text/javascript">

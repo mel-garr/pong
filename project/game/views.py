@@ -121,7 +121,9 @@ def offmulti_view(request, room_id):
             game.start_game()
 
 
-        return render(request, 'game/offmulti.html', {'room' : room})
+        return render(request, 'game/offmulti.html', {'room' : room, 'game' : game})
+        # return render(request, 'game/offmulti.html', {'room' : room})
+
     except Exception as e :
         return JsonResponse({'status':'errro', 'message':str(e)}, status=500)
     

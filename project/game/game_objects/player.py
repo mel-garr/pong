@@ -1,9 +1,11 @@
+from .paddle import Paddle
+from .ball import Ball
+from .field import Field
+ 
 
-from . import *
-
-class PLayer:
-    def __init__(self, base, side='red', i):
-        self.name = name
+class Player:
+    def __init__(self, base, i, side='red'):
+        self.name = base.name
         # data token from the object position
         self.paddle = Paddle(base, side, i)
         self.ball = Ball(base, side)

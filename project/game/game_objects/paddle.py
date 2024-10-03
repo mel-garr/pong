@@ -14,10 +14,10 @@ paddle_spacing = 10
 class Paddle:
     def __init__(self, base, side, i):
         j = 1 if side == 'red' else -1
-        self.width = paddle_type[base.paddle_type][0]
-        self.hight = paddle_type[base.paddle_type][1]
-        self.color = paddle_type[base.paddle_type][2]
-        self.x = (paddle_type[base.paddle_type][3] + (i * paddle_spacing)) * j
-        self.y = paddle_type[base.paddle_type][4]
+        self.width = paddle_type[base.paddle][0]
+        self.hight = paddle_type[base.paddle][1]
+        self.color = paddle_type[base.paddle][2]
+        self.x = (paddle_type[base.paddle][3] + (i * paddle_spacing)) * j
+        self.y = paddle_type[base.paddle][4]
 
     
