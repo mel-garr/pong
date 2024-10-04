@@ -87,3 +87,105 @@
         </script>
 </body>
 </html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Game</title>
+    <style>
+        #gamecanvas{
+            height : 600px;
+            width : 800px;
+            border : 1px black solid;
+            background-color: grey;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Welcome to the game room: {{ room.name }}</h1>
+    <p>Room ID: {{ room.id }}</p>
+
+    <input type="text" id="messageInput" placeholder="Type a message" />
+    <button onclick="sendMessage()">Send Message</button>
+    {% for player in game.redteamplayers %}
+        print ('{{player.name}})
+    {% endfor %}
+
+    <canvas id="gamecanvas"></canvas>
+    <script>
+        window.onload = function(){
+
+            const canvas = document.querySelector('#gamecanvas');
+            const ctx = canvas.getContext('2d');
+            let wi = 800;
+            let hi = 600;
+            
+            function render(){
+                ctx.clearRect(0, 0, wi, hi);
+                {% for player in game.redteamplayers %}
+                // ctx.fillStyle = {{player.paddle.color}};
+                ctx.fillStyle = "red";
+                //x, y, wi, hei
+                ctx.fillRect(30,300,10,30);
+                // ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
+                console.log({{player.paddle.x}});
+                console.log({{player.paddle.y}});
+                console.log({{player.paddle.width}});
+                console.log({{player.paddle.hight}});
+            {% endfor %}
+        }
+        setInterval(render, 100);
+    };
+    </script>
+    <!-- <script type="text/javascript">
+        const roomId = "{{ room.id }}";  // From the view context
+        console.log("Room ID:", roomId);
+        const socket = new WebSocket(`ws://${window.location.host}/ws/${roomId}/`);
+
+        // Handle incoming messages
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log("Message from server:", data.message);
+            // You can handle the game state update here
+        };
+
+        // When the WebSocket connection is opened
+        socket.onopen = function(event) {
+            console.log("WebSocket is open now.");
+            // Optionally, you can send a message to the server to initialize game state
+            socket.send(JSON.stringify({ 'message': 'Player connected!' }));
+        };
+
+        // When the WebSocket connection is closed
+        socket.onclose = function(event) {
+            console.log("WebSocket is closed.");
+        };
+
+        // Handle errors
+        socket.onerror = function(error) {
+            console.error("WebSocket error observed:", error);
+        };
+
+        // Function to send messages to the server
+        function sendMessage() {
+            const message = document.getElementById("messageInput").value;
+            socket.send(JSON.stringify({ 'message': message }));
+        }
+    </script> -->
+</body>
+</html>
+
+      {% for player in game.redteamplayers %}
+                    ctx.fillStyle = "{{player.paddle.color}}";
+                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
+                
+                    {% endfor %}
+                {% for player in game.blueteamplayers %}
+                    ctx.fillStyle = "{{player.paddle.color}}";
+                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
+
+                {% endfor %}

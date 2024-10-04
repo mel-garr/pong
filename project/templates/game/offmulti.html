@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplayer Game</title>
+    <style>
+        #gamecanvas{
+            height : 600px;
+            width : 800px;
+            border : 1px black solid;
+            background-color: grey;
+        }
 
+    </style>
 </head>
 <body>
     <h1>Welcome to the game room: {{ room.name }}</h1>
@@ -15,9 +23,42 @@
     {% for player in game.redteamplayers %}
         print ('{{player.name}})
     {% endfor %}
+    {% for player in game.blueteamplayers %}
+    print ('{{player.name}})
+{% endfor %}
 
-    
-    <script type="text/javascript">
+    <canvas id="gamecanvas" ></canvas>
+    <script>
+        console.log('yo')
+        console.log("{{game.redfield.color}}");
+            const canvas = document.querySelector('#gamecanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 800;
+            canvas.height = 600;
+            
+            function render(){
+                ctx.clearRect(0, 0, canvas.width , canvas.height);
+                //pritn filed - ball then players
+                ctx.fillStyle = "{{game.redfield.color}}";
+                ctx.fillRect(0, 0, {{game.redfield.width}}, {{game.redfield.height}})
+                ctx.fillStyle = "{{game.bluefield.color}}";
+                ctx.fillRect({{game.redfield.width}}, 0, canvas.width, canvas.height)
+                {% for player in game.redteamplayers %}
+                    ctx.fillStyle = "{{player.paddle.color}}";
+                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
+                
+                    {% endfor %}
+                {% for player in game.blueteamplayers %}
+                    ctx.fillStyle = "{{player.paddle.color}}";
+                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
+
+                {% endfor %}
+          
+        }
+        render();
+        // setInterval(render, 100);
+    </script>
+    <!-- <script type="text/javascript">
         const roomId = "{{ room.id }}";  // From the view context
         console.log("Room ID:", roomId);
         const socket = new WebSocket(`ws://${window.location.host}/ws/${roomId}/`);
@@ -51,6 +92,6 @@
             const message = document.getElementById("messageInput").value;
             socket.send(JSON.stringify({ 'message': message }));
         }
-    </script>
+    </script> -->
 </body>
 </html>
