@@ -18,3 +18,10 @@ class Field:
 
         # print('===>', side)
 
+    def serialize(self):
+        return {
+            'width' : self.width,
+            'color' : self.color,
+            'height': self.height,
+        }
+

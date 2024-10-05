@@ -14,6 +14,13 @@ class Player:
         
         # data token fro; the class paddle
 
+    def serialize(self):
+        return {
+            'name'   : self.name,
+            'paddle' : self.paddle.serialize(),
+            # 'ball'   : self.ball.serialize(),
+            'field'  : self.field.serialize(),
+        }
 
 
         

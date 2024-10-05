@@ -2,9 +2,9 @@
 
 #speed  x y R  color 
 ball_typo = {
-    'default': [20, 30, 10, 10, 'green'],
-    'type1'  : [20, 30, 10, 10, 'red'], 
-    'type2'  : [20, 30, 10, 10, 'blue'], 
+    'default': [300, 400, 300, 10, 'green'],
+    'type1'  : [300, 400, 300, 15, 'red'], 
+    'type2'  : [300, 400, 300, 20, 'blue'], 
 }
 
 class Ball:
@@ -16,5 +16,13 @@ class Ball:
         self.radius = ball_typo[base.ball][3]
         self.color = ball_typo[base.ball][4]
 
+    def serialize(self):
+        return {
+            'speed' : self.speed,
+            'x'     : self.x,
+            'y'     : self.y,
+            'radius': self.radius,
+            'color' : self.color,
+        }
     
     

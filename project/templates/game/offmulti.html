@@ -17,7 +17,6 @@
 <body>
     <h1>Welcome to the game room: {{ room_id }}</h1>
     <p>Room ID: {{ room_id}}</p>
-
     <input type="text" id="messageInput" placeholder="Type a message" />
     <button onclick="sendMessage()">Send Message</button>
 
@@ -34,8 +33,32 @@
         // Handle incoming messages
         sockett.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            console.log("Message from server:", data);
+            // console.log("Message from server:", data);
+            update_game(data);
         };
+        
+        function update_game(data){
+            ctx.clearRect(0, 0, canvas.width , canvas.height);
+            ctx.fillStyle = data.redfield.color;
+            ctx.fillRect(0, 0, data.redfield.width, data.redfield.height);
+            ctx.fillStyle = data.bluefield.color;
+            ctx.fillRect(data.redfield.width, 0, data.bluefield.width, data.bluefield.height);
+            ctx.fillStyle = data.ballside.color;
+            ctx.beginPath();
+            ctx.arc(data.ballside.x, data.ballside.y, data.ballside.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+            data.redteamplayers.forEach((player)=>{
+                console.log('redplayer' , player.name);
+                ctx.fillStyle = player.paddle.color;
+                ctx.fillRect(player.paddle.x, player.paddle.y, player.paddle.width, player.paddle.height);
+            });
+            data.blueteamplayers.forEach((player)=>{
+                console.log('blueplayer' , player.name);
+                ctx.fillStyle = player.paddle.color;
+                ctx.fillRect(player.paddle.x, player.paddle.y, player.paddle.width, player.paddle.height);
+            });
+        } 
         
         // When the WebSockett connection is opened
         sockett.onopen = function(event) {
@@ -59,15 +82,7 @@
             const message = document.getElementById("messageInput").value;
             sockett.send(JSON.stringify({ 'message': message }));
         }
-        // ctx.fillStyle = "red";
-        // ctx.fillRect(0, 0, 300, 400);
 
         </script>
-<!-- // You can handle the game state update here
-// update_game(data);
-// function update_game(data){
-//     ctx.clearRect(0, 0, canvas.width , canvas.height);
-//     // console.log(data.name);
-// } -->
 </body>
 </html>

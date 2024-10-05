@@ -13,7 +13,10 @@ class Game:
         self.gametype = room.gametype
         self.winningteam = room.winning_team
         self.max_score = room.max_score
+
+        #
         self.ballside = None
+        
 
         #init data of each team
         self.redteamplayers = None
@@ -31,11 +34,11 @@ class Game:
         self.redteamplayers = await self.initteam(room.redteamplayers)
         self.blueteamplayers = await self.initteam(room.blueteamplayers, side='blue')
 
-        self.ballside = await self.getballside()  # Await the method to get the ball side
         self.redteamball = await self.getball(self.redteamplayers)
         self.redfield = await self.getfield(self.redteamplayers)
         self.blueteamball = await self.getball(self.blueteamplayers)
         self.bluefield = await self.getfield(self.blueteamplayers)
+        self.ballside = await self.getballside()  
 
     async def initteam(self, team, side='red'):
         squad = []
@@ -57,7 +60,26 @@ class Game:
         return avatar.field if avatar else None
     
     async def getballside(self):
-        return random.choice(['blue', 'red'])
+        return random.choice([self.redteamball, self.blueteamball])
 
     def start_game(self):
         print ('AAAA')
+
+
+    def serialize_game_data(self):
+        return {
+            'redteamplayers' : [player.serialize() for player in self.redteamplayers],
+            'blueteamplayers': [player.serialize() for player in self.blueteamplayers],
+            'name'           : self.name,
+            'status'         : self.gamestatus,
+            'gametype'       : self.gametype,
+            'winningteam'    : self.winningteam,
+            'max_score'      : self.max_score,
+            'ballside'       : (self.ballside).serialize(),
+            # 'redteamball'    : (self.redteamball).serialize(),
+            'redfield'       : (self.redfield).serialize(),
+            'redscore'       : self.redscore,
+            # 'blueteamball'   : (self.blueteamball).serialize(),
+            'bluefield'      : (self.bluefield).serialize(),
+            'bluescore'      : self.bluescore,
+        }

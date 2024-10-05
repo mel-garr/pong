@@ -67,9 +67,9 @@ export class Ball{
     }
 
     draw(ct){
+		ct.fillStyle = this.color;
         ct.beginPath();
 		ct.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-		ct.fillStyle = this.color;
 		ct.fill();
 		ct.closePath();
     }

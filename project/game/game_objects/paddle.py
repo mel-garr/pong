@@ -15,9 +15,17 @@ class Paddle:
     def __init__(self, base, side, i):
         j = 0 if side == 'red' else 800
         self.width = paddle_type[base.paddle][0]
-        self.hight = paddle_type[base.paddle][1]
+        self.height = paddle_type[base.paddle][1]
         self.color = paddle_type[base.paddle][2]
         self.x = j - (paddle_type[base.paddle][3] + (i * paddle_spacing)) if side == 'blue' else (paddle_type[base.paddle][3] + (i * paddle_spacing))
-        self.y = paddle_type[base.paddle][4] - self.hight / 2
+        self.y = paddle_type[base.paddle][4] - self.height / 2
 
+    def serialize(self):
+        return {
+            'width' : self.width,
+            'height': self.height,
+            'color' : self.color,
+            'x'     : self.x,
+            'y'     : self.y,
+        }
     
