@@ -15,83 +15,59 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to the game room: {{ room.name }}</h1>
-    <p>Room ID: {{ room.id }}</p>
+    <h1>Welcome to the game room: {{ room_id }}</h1>
+    <p>Room ID: {{ room_id}}</p>
 
     <input type="text" id="messageInput" placeholder="Type a message" />
     <button onclick="sendMessage()">Send Message</button>
-    {% for player in game.redteamplayers %}
-        print ('{{player.name}})
-    {% endfor %}
-    {% for player in game.blueteamplayers %}
-    print ('{{player.name}})
-{% endfor %}
+
 
     <canvas id="gamecanvas" ></canvas>
-    <script>
-        console.log('yo')
-        console.log("{{game.redfield.color}}");
-            const canvas = document.querySelector('#gamecanvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 800;
-            canvas.height = 600;
-            
-            function render(){
-                ctx.clearRect(0, 0, canvas.width , canvas.height);
-                //pritn filed - ball then players
-                ctx.fillStyle = "{{game.redfield.color}}";
-                ctx.fillRect(0, 0, {{game.redfield.width}}, {{game.redfield.height}})
-                ctx.fillStyle = "{{game.bluefield.color}}";
-                ctx.fillRect({{game.redfield.width}}, 0, canvas.width, canvas.height)
-                {% for player in game.redteamplayers %}
-                    ctx.fillStyle = "{{player.paddle.color}}";
-                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
-                
-                    {% endfor %}
-                {% for player in game.blueteamplayers %}
-                    ctx.fillStyle = "{{player.paddle.color}}";
-                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
 
-                {% endfor %}
-          
-        }
-        render();
-        // setInterval(render, 100);
-    </script>
-    <!-- <script type="text/javascript">
-        const roomId = "{{ room.id }}";  // From the view context
-        console.log("Room ID:", roomId);
-        const socket = new WebSocket(`ws://${window.location.host}/ws/${roomId}/`);
+    <script type="text/javascript">
+        const canvas = document.querySelector('#gamecanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 800;
+        canvas.height = 600;
 
+        const sockett = new WebSocket(`ws://${window.location.host}/ws/offgame/{{room_id}}/`);
         // Handle incoming messages
-        socket.onmessage = function(event) {
+        sockett.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            console.log("Message from server:", data.message);
-            // You can handle the game state update here
+            console.log("Message from server:", data);
         };
-
-        // When the WebSocket connection is opened
-        socket.onopen = function(event) {
-            console.log("WebSocket is open now.");
+        
+        // When the WebSockett connection is opened
+        sockett.onopen = function(event) {
+            console.log("WebSockett is open now.");
             // Optionally, you can send a message to the server to initialize game state
-            socket.send(JSON.stringify({ 'message': 'Player connected!' }));
+            sockett.send(JSON.stringify({ 'message': 'Player connected!' }));
         };
 
-        // When the WebSocket connection is closed
-        socket.onclose = function(event) {
-            console.log("WebSocket is closed.");
+        // When the WebSockett connection is closed
+        sockett.onclose = function(event) {
+            console.log("WebSockett is closed.");
         };
 
         // Handle errors
-        socket.onerror = function(error) {
-            console.error("WebSocket error observed:", error);
+        sockett.onerror = function(error) {
+            console.error("WebSockett error observed:", error);
         };
 
         // Function to send messages to the server
         function sendMessage() {
             const message = document.getElementById("messageInput").value;
-            socket.send(JSON.stringify({ 'message': message }));
+            sockett.send(JSON.stringify({ 'message': message }));
         }
-    </script> -->
+        // ctx.fillStyle = "red";
+        // ctx.fillRect(0, 0, 300, 400);
+
+        </script>
+<!-- // You can handle the game state update here
+// update_game(data);
+// function update_game(data){
+//     ctx.clearRect(0, 0, canvas.width , canvas.height);
+//     // console.log(data.name);
+// } -->
 </body>
 </html>

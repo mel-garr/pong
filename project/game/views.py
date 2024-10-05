@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
 from .models import *
 from django.http import JsonResponse, HttpResponse
-import json
 from django.views.decorators.csrf import csrf_exempt
+import json
+from django.shortcuts import render, get_object_or_404
 from .game_objects.pgame import *
 
 # Create your views here.
@@ -114,17 +114,17 @@ def setuplobbyoff(request):
     return JsonResponse({'status': 'not ok'}, status=405)
             
 def offmulti_view(request, room_id):
-    try :
-        room = get_object_or_404(roomData, id=room_id)
-        if room :
-            game = Game(room)
-            game.start_game()
+    # try :
+        # room = get_object_or_404(roomData, id=room_id)
+        # if room :
+        #     game = Game(room)
+        #     game.start_game()
 
 
-        return render(request, 'game/offmulti.html', {'room' : room, 'game' : game})
-        # return render(request, 'game/offmulti.html', {'room' : room})
+    return render(request, 'game/offmulti.html', {'room_id' : room_id})
+        # return render(request, 'game/offmulti.html', {'room' : room, 'game' : game})
 
-    except Exception as e :
-        return JsonResponse({'status':'errro', 'message':str(e)}, status=500)
+    # except Exception as e :
+    #     return JsonResponse({'status':'errro', 'message':str(e)}, status=500)
     
-    return JsonResponse({'status': 'not ok'}, status=405) 
+    # return JsonResponse({'status': 'not ok'}, status=405) 

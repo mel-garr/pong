@@ -189,3 +189,36 @@
                     ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
 
                 {% endfor %}
+
+
+
+
+
+                    <!-- <script>
+            const canvas = document.querySelector('#gamecanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 800;
+            canvas.height = 600;
+            
+            function render(){
+                ctx.clearRect(0, 0, canvas.width , canvas.height);
+                //pritn filed - ball then players
+                ctx.fillStyle = "{{game.redfield.color}}";
+                ctx.fillRect(0, 0, {{game.redfield.width}}, {{game.redfield.height}})
+                ctx.fillStyle = "{{game.bluefield.color}}";
+                ctx.fillRect({{game.redfield.width}}, 0, canvas.width, {{game.redfield.height}})
+                {% for player in game.redteamplayers %}
+                    ctx.fillStyle = "{{player.paddle.color}}";
+                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
+                
+                    {% endfor %}
+                {% for player in game.blueteamplayers %}
+                    ctx.fillStyle = "{{player.paddle.color}}";
+                    ctx.fillRect({{player.paddle.x}}, {{player.paddle.y}},{{player.paddle.width}}, {{player.paddle.hight}});
+
+                {% endfor %}
+          
+        }
+        setInterval(render, 100);
+        // render();
+    </script> -->

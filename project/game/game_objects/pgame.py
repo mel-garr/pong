@@ -3,6 +3,8 @@ from ..models import *
 from . import *
 from .player import Player
 import random
+from asgiref.sync import sync_to_async
+
 
 class Game:
     def __init__(self, room):
@@ -11,41 +13,50 @@ class Game:
         self.gametype = room.gametype
         self.winningteam = room.winning_team
         self.max_score = room.max_score
-        self.ballside = self.getballside()
+        self.ballside = None
 
         #init data of each team
-        self.redteamplayers = self.initteam(room.redteamplayers)
-        self.redteamball = self.getball(self.redteamplayers)
-        self.redfield = self.getfield(self.redteamplayers)
+        self.redteamplayers = None
+        self.redteamball =  None
+        self.redfield = None
         self.redscore = 0
 
-        self.blueteamplayers = self.initteam(room.blueteamplayers, side='blue')
-        self.blueteamball = self.getball(self.blueteamplayers)
-        self.bluefield = self.getfield(self.blueteamplayers)
+        self.blueteamplayers = None
+        self.blueteamball = None
+        self.bluefield = None
         self.bluescore = 0
 
         
+    async def initialize_game(self, room):
+        self.redteamplayers = await self.initteam(room.redteamplayers)
+        self.blueteamplayers = await self.initteam(room.blueteamplayers, side='blue')
 
-    def initteam(self, team, side='red'):
+        self.ballside = await self.getballside()  # Await the method to get the ball side
+        self.redteamball = await self.getball(self.redteamplayers)
+        self.redfield = await self.getfield(self.redteamplayers)
+        self.blueteamball = await self.getball(self.blueteamplayers)
+        self.bluefield = await self.getfield(self.blueteamplayers)
+
+    async def initteam(self, team, side='red'):
         squad = []
         i = 1
-        for teamp in team.all():
+        team_list = await sync_to_async(list)(team.all())
+        for teamp in team_list:
             tp = Player(teamp, i, side)
             squad.append(tp)
             i += 1
         return squad
 
 
-    def getball(self, team):
+    async def getball(self, team):
         avatar = random.choice(list(team)) if team else None
-        return avatar.ball
+        return avatar.ball if avatar else None
 
-    def getfield(self, team):
+    async def getfield(self, team):
         avatar = random.choice(list(team)) if team else None
-        print (avatar.field.color)
-        return avatar.field
+        return avatar.field if avatar else None
     
-    def getballside(self):
+    async def getballside(self):
         return random.choice(['blue', 'red'])
 
     def start_game(self):
