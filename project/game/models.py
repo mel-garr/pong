@@ -26,9 +26,9 @@ class RoomL(models.Model):
         ('online', 'multiOn'),
         ('tournament', 'Tournament'),
     ]
-    name = models.CharField(max_length=50, blank=False, null=False)
+    name      = models.CharField(max_length=50, blank=False, null=False)
     playerNbr = models.IntegerField(default=2)
-    typel = models.CharField(max_length=10, choices = room_type ,default='none')
+    typel     = models.CharField(max_length=10, choices = room_type ,default='none')
 
     def __str__(self):
         return self.name
@@ -64,6 +64,7 @@ class playerData(models.Model):
     paddle = models.CharField(max_length=50, choices= paddle_type, default='default')
     ball = models.CharField(max_length=50, choices= ball_type, default='default')
     field = models.CharField(max_length=50, choices= field_type, default='default')
+    keys = models.JSONField(default=dict)
     # team = models.CharField(max_length=10, choices = team ,default='none')
 
     def __str__(self):
@@ -109,3 +110,11 @@ class roomData(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class playerSettings(models.Model):
+    player  = models.ForeignKey(playerData, on_delete=models.CASCADE, related_name='settings')
+    keyup   = models.CharField(max_length=50, blank=False, null=False)
+    keydown = models.CharField(max_length=50, blank=False, null=False)
+
+    def __str__(self):
+        return f"{self.player.name}'s settings"

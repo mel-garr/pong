@@ -49,12 +49,12 @@
             ctx.fill();
             ctx.closePath();
             data.redteamplayers.forEach((player)=>{
-                console.log('redplayer' , player.name);
+                // console.log('redplayer' , player.name);
                 ctx.fillStyle = player.paddle.color;
                 ctx.fillRect(player.paddle.x, player.paddle.y, player.paddle.width, player.paddle.height);
             });
             data.blueteamplayers.forEach((player)=>{
-                console.log('blueplayer' , player.name);
+                // console.log('blueplayer' , wplayer.name);
                 ctx.fillStyle = player.paddle.color;
                 ctx.fillRect(player.paddle.x, player.paddle.y, player.paddle.width, player.paddle.height);
             });
@@ -77,11 +77,37 @@
             console.error("WebSockett error observed:", error);
         };
 
+
+
         // Function to send messages to the server
         function sendMessage() {
-            const message = document.getElementById("messageInput").value;
-            sockett.send(JSON.stringify({ 'message': message }));
+
+            
+            document.addEventListener('keydown', function(event){
+                if  (event.key === 'ArrowUp'){
+                    sockett.send(JSON.stringify({'player1': 'up'}))
+                }else if  (event.key === 'ArrowDown'){
+                    sockett.send(JSON.stringify({'player2': 'down'}))
+                }else if  (event.key === 'w'){
+                    sockett.send(JSON.stringify({'player1': 'up'}))
+                }else if  (event.key === 's'){
+                    sockett.send(JSON.stringify({'player2': 'down'}))
+                }
+            });
+            document.addEventListener('keyup', function(event){
+                if  (event.key === 'ArrowUp'){
+                    sockett.send(JSON.stringify({'splayer1': 'up'}))
+                }else if  (event.key === 'ArrowDown'){
+                    sockett.send(JSON.stringify({'splayer2': 'down'}))
+                }else if  (event.key === 'w'){
+                    sockett.send(JSON.stringify({'splayer1': 'up'}))
+                }else if  (event.key === 's'){
+                    sockett.send(JSON.stringify({'splayer2': 'down'}))
+                }
+            });
         }
+
+        sendMessage();
 
         </script>
 </body>

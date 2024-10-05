@@ -77,22 +77,42 @@ def setuplobbyoff(request):
     if request.method == 'POST':
         try :
             data = json.loads(request.body)
+            valid_keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'] + list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
             # print (data)
             required_fields = ['p1nickname', 'p1paddle', 'p1ball', 'p1field', 
-                            'p2nickname', 'p2paddle', 'p2ball', 'p2field']
+                            'p2nickname', 'p2paddle', 'p2ball', 'p2field',
+                            'keyupp1', 'keydownp1',
+                            'keyupp2', 'keydownp2']
+            keys_field = ['keyupp1', 'keydownp1',
+                        'keyupp2', 'keydownp2']
+            print (data['keyupp1'])
+
             if not all(data.get(field) for  field in required_fields):
                 return JsonResponse({'status': 'missing fields'}, status=400)
+
+            for field in keys_field:
+                if data[field] not in valid_keys:
+                    return JsonResponse({'status': 'Invalid key provided'}, status=400)
+            
             P1 = playerData(
                 name = data['p1nickname'],
                 paddle = data['p1paddle'],
                 ball = data['p1ball'],
                 field = data['p1field'],
+                keys = {
+                    'keyup' : data['keyupp1'], 
+                    'keydown': data['keydownp1'],
+                    }
             )
             P2 = playerData(
                 name = data['p2nickname'],
                 paddle = data['p2paddle'],
                 ball = data['p2ball'],
                 field = data['p2field'],
+                keys = {
+                    'keyup' : data['keyupp2'], 
+                    'keydown': data['keydownp2'],
+                    }
             )
             P1.save()
             P2.save()

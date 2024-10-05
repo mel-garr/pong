@@ -6,7 +6,7 @@
     <title>Lobby</title>
     <style>
          .players {
-            display: flex;
+            /* display: flex; */
          }
 
          .player1, 
@@ -15,36 +15,69 @@
             display: block;
             border: solid 5px;
          }
+         .players,
+         .option_setting{
+            display: flex;
+         }
+         .player1movset, 
+         .player2movset {
+            width: 50%;
+            display: block;
+            border: solid 5px;
+         }
+         /* .settings{
+            display: none;
+         } */
 
     </style>
 
 </head>
 <body>
-    <div class="players">
-
-        <template id="player-options-template">
-            <option value="default">default</option>
-            <option value="type1">type1</option>
-            <option value="type2">type2</option>
-        </template>
-
-        <div class="player1">
-            <div>player1 data</div>
-            <input class="nicnamep1" placeholder="nickname" required><br>
-            paddle<select class="paddlep1" ></select><br>
-            field<select class="fieldp1" ></select><br>
-            ball<select class="ballp1" ></select><br>
+        <div class="main_div">
+            <h2>player data</h2>
+            <div class="players">
+                <template id="player-options-template">
+                    <option value="default">default</option>
+                    <option value="type1">type1</option>
+                <option value="type2">type2</option>
+            </template>
+            
+            <div class="player1">
+                <div>player1 data</div>
+                <input class="nicnamep1" placeholder="nickname" required><br>
+                paddle<select class="paddlep1" ></select><br>
+                field<select class="fieldp1" ></select><br>
+                ball<select class="ballp1" ></select><br>
+                
+            </div>
+            <div class="player2">
+                <div>player2 data</div>
+                <input class="nicnamep2" placeholder="nickname" required><br>
+                paddle<select class="paddlep2" ></select><br>
+                field<select class="fieldp2" ></select><br>
+                ball<select class="ballp2" ></select><br>
+            </div>
         </div>
-        <div class="player2">
-            <div>player2 data</div>
-            <input class="nicnamep2" placeholder="nickname" required><br>
-            paddle<select class="paddlep2" ></select><br>
-            field<select class="fieldp2" ></select><br>
-            ball<select class="ballp2" ></select><br>
+    </div>
+        <div class="option">
+
+            <div class="settings">
+            <h2>settings</h2>
+                <div class="option_setting">
+                    <div class="player1movset">
+                        <div>player1 movset</div>
+                        keyup<input class="keyupp1" placeholder="keyup" value='w' required><br>
+                        keydown<input class="keydownp1" placeholder="keydown" value='s' required><br>                    
+                    </div>
+                    <div class="player2movset">
+                        <div>player2 movset</div>
+                        keyup<input class="keyupp2" placeholder="keyup" value='ArrowUp' required><br>
+                        keydown<input class="keydownp2" placeholder="keydown" value='ArrowDown' required><br> 
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="error-message" style="color: red;"></div>
-
-    </div>
     
 <button class="lanch_off_multi">Start a game</button>
    
@@ -71,6 +104,10 @@
             let p2paddle = document.querySelector('.paddlep2').value;
             let p2field = document.querySelector('.fieldp2').value;
             let p2ball = document.querySelector('.ballp2').value;
+            let keyupp1 = document.querySelector('.keyupp1').value;
+            let keydownp1 = document.querySelector('.keydownp1').value;
+            let keyupp2 = document.querySelector('.keyupp2').value;
+            let keydownp2 = document.querySelector('.keydownp2').value;
             fetch('/game/setuplobbyoff/',{
                 method : 'POST',
                 headers : {
@@ -80,12 +117,14 @@
                 body : JSON.stringify({
                     p1paddle: p1paddle, p1nickname: p1nickname, p1field:p1field,p1ball:p1ball,
                     p2paddle: p2paddle, p2nickname: p2nickname, p2field:p2field,p2ball:p2ball, 
+                    keyupp1 : keyupp1 , keydownp1 : keydownp1 ,
+                    keyupp2 : keyupp2 , keydownp2 : keydownp2 ,
                 }),
             })
             .then(response => {
             if (!response.ok) {
                 return response.json().then(data => {
-                    throw new Error('Network response was not ok');
+                    throw new Error(data.status || 'Network response was not ok');
                 });
             }
             return response.json(); 
@@ -101,7 +140,7 @@
                 }
             })
             .catch (error =>{
-                console.error('Error:', error);
+                // console.error('Error:', error);
                 document.getElementById('error-message').innerText = error.message;
             })
         };

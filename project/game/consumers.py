@@ -44,8 +44,9 @@ class gameConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
+        print (data)
         serialized_data = active_games[self.room_n].serialize_game_data()
-        print(serialized_data)
+        # print(serialized_data)
         await self.channel_layer.group_send(
             self.room_group_name,{
                 'type': 'game_update',
