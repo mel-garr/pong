@@ -115,8 +115,8 @@ def setuplobbyoff(request):
                 ball = data['p2ball'],
                 field = data['p2field'],
                 keys = {
-                    'keyup' : data['keyupp2'], 
-                    'keydown': data['keydownp2'],
+                    'keyup' : data['keyupp2'].lower(), 
+                    'keydown': data['keydownp2'].lower(),
                     }
             )
             P1.save()

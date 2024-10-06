@@ -43,16 +43,39 @@ class gameConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        data = json.loads(text_data)
-        print (data)
+        update = json.loads(text_data)
+        print (update)
+        if update['type'] == 'init':
+            serialized_data = active_games[self.room_n].serialize_game_data()
+            await self.channel_layer.group_send(
+                self.room_group_name,{
+                    'type': 'game_update',
+                    'data': serialized_data,
+                }
+            )
+            return
+        player_name = update['name']
+        action_type = update['type']
+        action = update['action']
+
+        await self.handle_player_action(player_name, action_type, action)
         serialized_data = active_games[self.room_n].serialize_game_data()
-        # print(serialized_data)
         await self.channel_layer.group_send(
             self.room_group_name,{
                 'type': 'game_update',
                 'data': serialized_data,
             }
         )
+
+    async def handle_player_action(self, player_name, action_type, action):
+        player = next((player for player in active_games[self.room_n].redteamplayers + active_games[self.room_n].blueteamplayers if player.name == player_name), None)
+        if player:
+            # Update paddle position based on the action
+            if action_type == 'keydown':
+                if action == 'up':
+                    player.paddle.y -= 5  # Adjust as needed for your game
+                elif action == 'down':
+                    player.paddle.y += 5
 
     async def game_update(self, event):
         data = event['data']
