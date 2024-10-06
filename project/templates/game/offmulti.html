@@ -17,6 +17,9 @@
 <body>
     <h1>Welcome to the game room: {{ room_id }}</h1>
     <p>Room ID: {{ room_id}}</p>
+    <p>player 1  name :{{P1.name}}, up is : {{P1.keys.keyup}} and down is {{P1.keys.keydown}}</p>
+    <p>player 2  name :{{P2.name}}, up is : {{P2.keys.keyup}} and down is {{P2.keys.keydown}}</p>
+
     <input type="text" id="messageInput" placeholder="Type a message" />
     <button onclick="sendMessage()">Send Message</button>
 

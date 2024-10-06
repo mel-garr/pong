@@ -83,17 +83,22 @@ def setuplobbyoff(request):
                             'p2nickname', 'p2paddle', 'p2ball', 'p2field',
                             'keyupp1', 'keydownp1',
                             'keyupp2', 'keydownp2']
-            keys_field = ['keyupp1', 'keydownp1',
-                        'keyupp2', 'keydownp2']
-            print (data['keyupp1'])
+
+            seen = set()
 
             if not all(data.get(field) for  field in required_fields):
                 return JsonResponse({'status': 'missing fields'}, status=400)
 
+            keys_field = ['keyupp1', 'keydownp1',
+                        'keyupp2', 'keydownp2']
+
             for field in keys_field:
                 if data[field] not in valid_keys:
                     return JsonResponse({'status': 'Invalid key provided'}, status=400)
-            
+                if data[field] in seen:
+                    return JsonResponse({'status': 'duplicate key provided'}, status=400)
+                seen.add(data[field])
+
             P1 = playerData(
                 name = data['p1nickname'],
                 paddle = data['p1paddle'],
@@ -134,17 +139,17 @@ def setuplobbyoff(request):
     return JsonResponse({'status': 'not ok'}, status=405)
             
 def offmulti_view(request, room_id):
-    # try :
-        # room = get_object_or_404(roomData, id=room_id)
-        # if room :
-        #     game = Game(room)
-        #     game.start_game()
+    try :
+        room = get_object_or_404(roomData, id=room_id)
+        P1 = room.redteamplayers.first()
+        P2 = room.blueteamplayers.first()
 
+        
+    except Exception as e :
+        return JsonResponse({'status':'errro', 'message':str(e)}, status=500)
 
-    return render(request, 'game/offmulti.html', {'room_id' : room_id})
+    return render(request, 'game/offmulti.html', {'room_id' : room_id, 'P1' : P1, 'P2' : P2})
         # return render(request, 'game/offmulti.html', {'room' : room, 'game' : game})
 
-    # except Exception as e :
-    #     return JsonResponse({'status':'errro', 'message':str(e)}, status=500)
     
     # return JsonResponse({'status': 'not ok'}, status=405) 
