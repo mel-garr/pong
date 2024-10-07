@@ -71,13 +71,11 @@ class Game:
         print ('AAAA')
         print ('game_statue: ', self.gamestatus)
 
-        # print (update)
-        #     print ('ja hna:', teamgs)
 
     def is_player_in(self, pl_name, teamplayers):
         return any(pl.name == pl_name for pl in teamplayers)
 
-    async def updategame(self, update):
+    async def updateGameState(self, update):
         print ('play_statue: ', self.playplayer)
         print ('after change:' ,self.gamestatus)
         if self.gamestatus == 'pause':
@@ -86,7 +84,7 @@ class Game:
                 if k['action'] == 'gs':
                     if self.is_player_in(k['player'], teamgs):
                         self.gamestatus = 'gamestart'
-                        return
+                        return 0
 
         if self.gamestatus == 'gamestart':
             if any(gss['action'] == 'gs' for gss in update):
@@ -94,14 +92,31 @@ class Game:
                     if gss['action'] == 'gs':
                         self.gamestatus= 'pause'
                         self.playplayer = 'blue' if self.is_player_in(gss['player'], self.blueteamplayers) else 'red'
-                        print (self.playplayer)
-                        return
+                        return 0
+        return 1
+        
+    async def updateball(self):
+        # print('ja l update ball')
+        # print('ball x:' ,self.x)
+        # print('ball x:' ,self.y)
+        if self.gamestatus == 'gamestart':
+            await self.ballside.updateball()
+
+
+    async def updategame(self, update):
+        print('ja l update game')
+        if not await self.updateGameState(update):
+            return
+        if self.gamestatus == 'gamestart':
+            # self.updateball()
+            print ('sala update')
+            return 
 
 
         #     pass
-            #updtae status
-            #update player
+            #updtae status --> done ?
             #update ball
+            #update player
         
 
 

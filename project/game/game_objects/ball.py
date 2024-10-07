@@ -2,9 +2,9 @@
 
 #speed  x y R  color 
 ball_typo = {
-    'default': [300, 400, 300, 10, 'green'],
-    'type1'  : [300, 400, 300, 15, 'red'], 
-    'type2'  : [300, 400, 300, 20, 'blue'], 
+    'default': [300, 400, 300, 10, 'green', 5],
+    'type1'  : [300, 400, 300, 15, 'red', 5], 
+    'type2'  : [300, 400, 300, 20, 'blue', 5], 
 }
 
 class Ball:
@@ -16,6 +16,8 @@ class Ball:
         self.radius = ball_typo[base.ball][3]
         self.color = ball_typo[base.ball][4]
         self.side = side
+        self.dx = ball_typo[base.ball][5]
+        self.dy = ball_typo[base.ball][5]
 
     def serialize(self):
         return {
@@ -26,4 +28,17 @@ class Ball:
             'color' : self.color,
         }
     
+    async def updateball(self):
+    
+        if (self.y + self.radius) >= 600 or (self.y - self.radius) <= 0:
+            self.dy *= -1
+        
+        if (self.x >= 800 - self.radius) or (self.x - self.radius) <= 0:
+            self.dx *= -1
+
+        self.x += self.dx
+        self.y += self.dy
+
+    
+
     

@@ -36,6 +36,7 @@
         // Handle incoming messages
         sockett.onmessage = function(event) {
             const data = JSON.parse(event.data);
+            // console.log('jq hnq')
             // console.log("Message from server:", data);
             update_game(data);
         };
@@ -114,8 +115,7 @@
             if (!pressedKeys[key]){
                 pressedKeys[key] = true;
             }
-            sendPressedKeys();   
-                     
+            sendPressedKeys();            
         });
         
         document.addEventListener('keyup', function(event){
@@ -126,9 +126,6 @@
             }
             sendPressedKeys();
         });
-        
-        // sendPressedKeys();
-
         </script>
 </body>
 </html>
