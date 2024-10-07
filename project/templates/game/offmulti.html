@@ -67,7 +67,7 @@
         sockett.onopen = function(event) {
             console.log("WebSockett is open now.");
             // Optionally, you can send a message to the server to initialize game state
-            sockett.send(JSON.stringify({ 'type' : 'init' }));
+            // sockett.send(JSON.stringify({ 'type' : 'init' }));
         };
 
         // When the WebSockett connection is closed
@@ -79,36 +79,54 @@
         sockett.onerror = function(error) {
             console.error("WebSockett error observed:", error);
         };
+
+        let pressedKeys = {};
+
         const keyMappings = {
-            ['{{P1.keys.keyup  }}']  : { player: '{{P1.name}}', action: 'up' },
-            ['{{P1.keys.keydown}}']  : { player: '{{P1.name}}', action: 'down' },
-            ['{{P2.keys.keyup  }}']  : { player: '{{P2.name}}', action: 'up' },
-            ['{{P2.keys.keydown}}']  : { player: '{{P2.name}}', action: 'down' },
+            '{{P1.keys.keyup  }}'  : { player: '{{P1.name}}', action: 'up' },
+            '{{P1.keys.keydown}}'  : { player: '{{P1.name}}', action: 'down' },
+            '{{P2.keys.keyup  }}'  : { player: '{{P2.name}}', action: 'up' },
+            '{{P2.keys.keydown}}'  : { player: '{{P2.name}}', action: 'down' },
         }
         
-        function sendata(type, key){
-            let mapping = keyMappings[key.toLowerCase()];
-            if (mapping){
-                sockett.send(JSON.stringify(
-                    {
-                        name : mapping.player,
-                        type : type,
-                        action : mapping.action
-                    }
-                ));
+        function sendPressedKeys(){
+            let actions = [];
+            Object.keys(pressedKeys).forEach(key =>{
+                const mapping = keyMappings[key];
+                if (mapping){
+                    actions.push({
+                        player : mapping.player,
+                        action : mapping.action 
+                    });
+                }
+            });
+            if (actions.length > 0){
+                sockett.send(JSON.stringify(actions))
             }
         }
-
+        
         document.addEventListener('keydown', function(event){
-            console.log('ha jan: ', event.key)
-            sendata('keydown', event.key);
+            const key = event.key.toLowerCase();
+            console.log(key)
+            if (!pressedKeys[key]){
+                pressedKeys[key] = true;
+            }
+            sendPressedKeys();   
+                     
         });
-
+        
         document.addEventListener('keyup', function(event){
-                sendata('keyup', event.key);
+            const key = event.key.toLowerCase();
+            if (pressedKeys[key]){
+                delete pressedKeys[key];
+                // sendata('keyup', event.key);
+            }
+            sendPressedKeys();
         });
-  
+        
+        // sendPressedKeys();
 
         </script>
 </body>
 </html>
+

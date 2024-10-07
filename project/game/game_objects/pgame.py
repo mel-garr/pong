@@ -16,6 +16,7 @@ class Game:
 
         #
         self.ballside = None
+        self.playplayer = None
         
 
         #init data of each team
@@ -38,7 +39,9 @@ class Game:
         self.redfield = await self.getfield(self.redteamplayers)
         self.blueteamball = await self.getball(self.blueteamplayers)
         self.bluefield = await self.getfield(self.blueteamplayers)
+        
         self.ballside = await self.getballside()  
+        self.playplayer = await self.getpayseplayer()
 
     async def initteam(self, team, side='red'):
         squad = []
@@ -65,6 +68,8 @@ class Game:
     def start_game(self):
         print ('AAAA')
 
+    async def updategame(self, update):
+        print (self.gamestatus)
 
     def serialize_game_data(self):
         return {

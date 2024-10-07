@@ -24,11 +24,15 @@ class gameConsumer(AsyncWebsocketConsumer):
             rooma = await self.get_room_data(self.room_n)
             active_games[self.room_n] = Game(rooma)
             await active_games[self.room_n].initialize_game(rooma)
-
             
-            # await self.game_update({'data': active_games[self.room_n].get_data()})    
-        
         await self.accept()
+        serialized_data = active_games[self.room_n].serialize_game_data()
+        await self.channel_layer.group_send(
+            self.room_group_name, {
+                'type': 'game_update',
+                'data': serialized_data,
+            }
+        )
 
 
     @database_sync_to_async
@@ -44,21 +48,9 @@ class gameConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         update = json.loads(text_data)
-        print (update)
-        if update['type'] == 'init':
-            serialized_data = active_games[self.room_n].serialize_game_data()
-            await self.channel_layer.group_send(
-                self.room_group_name,{
-                    'type': 'game_update',
-                    'data': serialized_data,
-                }
-            )
-            return
-        player_name = update['name']
-        action_type = update['type']
-        action = update['action']
-
-        await self.handle_player_action(player_name, action_type, action)
+        # print (update)
+        await active_games[self.room_n].updategame(update)
+    #     await self.handle_player_action(player_name, action_type, action)
         serialized_data = active_games[self.room_n].serialize_game_data()
         await self.channel_layer.group_send(
             self.room_group_name,{
@@ -69,13 +61,6 @@ class gameConsumer(AsyncWebsocketConsumer):
 
     async def handle_player_action(self, player_name, action_type, action):
         player = next((player for player in active_games[self.room_n].redteamplayers + active_games[self.room_n].blueteamplayers if player.name == player_name), None)
-        if player:
-            # Update paddle position based on the action
-            if action_type == 'keydown':
-                if action == 'up':
-                    player.paddle.y -= 5  # Adjust as needed for your game
-                elif action == 'down':
-                    player.paddle.y += 5
 
     async def game_update(self, event):
         data = event['data']

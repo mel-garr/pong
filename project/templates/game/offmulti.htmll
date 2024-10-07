@@ -222,3 +222,50 @@
         setInterval(render, 100);
         // render();
     </script> -->
+
+       document.addEventListener('keydown', function(event){
+            // event.preventDefault()
+            // sendata('keydown', event.key);
+            console.log('ha jan: ', event.key)
+            if (document.activeElement === canvas) {
+            event.preventDefault();  // Prevent default action (like scrolling)
+            sendata('keydown', event.key);
+        }
+        });
+
+        document.addEventListener('keyup', function(event){
+                // sendata('keyup', event.key);
+                if (document.activeElement === canvas) {
+            event.preventDefault();  // Prevent default action (like scrolling)
+            sendata('keydown', event.key);
+        }
+        });
+
+
+                // function sendata(type, key){
+        //     let mapping = keyMappings[key.toLowerCase()];
+        //     if (mapping){
+        //         sockett.send(JSON.stringify(
+        //             {
+        //                 name : mapping.player,
+        //                 type : type,
+        //                 action : mapping.action
+        //             }
+        //         ));
+        //     }
+        // }
+    //     function sendPressedKeys() {
+    // // Iterate over all the pressed keys and send data for keys marked as true
+    //     Object.keys(pressedKeys).forEach(key => {
+    //     if (pressedKeys[key]) {
+    //         let mapping = keyMappings[key];
+    //         if (mapping) {
+    //             sockett.send(JSON.stringify({
+    //                 name: mapping.player,
+    //                 type: 'keydown',
+    //                 action: mapping.action
+    //             }));
+    //         }
+    //     }
+    //     });
+    //     }
