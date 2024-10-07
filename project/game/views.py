@@ -124,7 +124,7 @@ def setuplobbyoff(request):
             party = roomData(
                 name = 'Defi',
                 gametype = 'Challenge',
-                gamestatus = 'gamestart',
+                gamestatus = 'pause',
             )
             party.save()
             party.redteamplayers.add(P1)

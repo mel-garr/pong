@@ -41,7 +41,7 @@ class Game:
         self.bluefield = await self.getfield(self.blueteamplayers)
         
         self.ballside = await self.getballside()  
-        self.playplayer = await self.getpayseplayer()
+        self.playplayer = await self.getpauseplayer()
 
     async def initteam(self, team, side='red'):
         squad = []
@@ -53,6 +53,8 @@ class Game:
             i += 1
         return squad
 
+    async def getpauseplayer(self):
+        return self.ballside.side
 
     async def getball(self, team):
         avatar = random.choice(list(team)) if team else None
@@ -67,9 +69,41 @@ class Game:
 
     def start_game(self):
         print ('AAAA')
+        print ('game_statue: ', self.gamestatus)
+
+        # print (update)
+        #     print ('ja hna:', teamgs)
+
+    def is_player_in(self, pl_name, teamplayers):
+        return any(pl.name == pl_name for pl in teamplayers)
 
     async def updategame(self, update):
-        print (self.gamestatus)
+        print ('play_statue: ', self.playplayer)
+        print ('after change:' ,self.gamestatus)
+        if self.gamestatus == 'pause':
+            teamgs = self.blueteamplayers if self.playplayer == 'blue' else self.redteamplayers
+            for k in update:
+                if k['action'] == 'gs':
+                    if self.is_player_in(k['player'], teamgs):
+                        self.gamestatus = 'gamestart'
+                        return
+
+        if self.gamestatus == 'gamestart':
+            if any(gss['action'] == 'gs' for gss in update):
+                for gss in update:
+                    if gss['action'] == 'gs':
+                        self.gamestatus= 'pause'
+                        self.playplayer = 'blue' if self.is_player_in(gss['player'], self.blueteamplayers) else 'red'
+                        print (self.playplayer)
+                        return
+
+
+        #     pass
+            #updtae status
+            #update player
+            #update ball
+        
+
 
     def serialize_game_data(self):
         return {

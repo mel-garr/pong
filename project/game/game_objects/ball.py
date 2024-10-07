@@ -15,6 +15,7 @@ class Ball:
         self.y = ball_typo[base.ball][2]
         self.radius = ball_typo[base.ball][3]
         self.color = ball_typo[base.ball][4]
+        self.side = side
 
     def serialize(self):
         return {

@@ -6,6 +6,7 @@ from .field import Field
 class Player:
     def __init__(self, base, i, side='red'):
         self.name = base.name
+        # self.side = side
         # data token from the object position
         self.paddle = Paddle(base, side, i)
         self.ball = Ball(base, side)

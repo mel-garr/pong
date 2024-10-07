@@ -269,3 +269,20 @@
     //     }
     //     });
     //     }
+
+                # if self.playplayer == 'blue':
+            #     for k in update:
+            #         if (k['action'] == 'gs'):
+            #             for pl in self.blueteamplayers:
+            #                 if (k['player'] == pl.name):
+            #                     self.gamestatus = 'gamestart'
+
+            # else :
+            #     for k in update:
+            #         if (k['action'] == 'gs'):
+            #             for pl in self.redteamplayers:
+            #                 if (k['player'] == pl.name):
+            #                     self.gamestatus = 'gamestart'
+
+
+        #     return 

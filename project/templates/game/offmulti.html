@@ -19,7 +19,7 @@
     <p>Room ID: {{ room_id}}</p>
     <p>player 1  name :{{P1.name}}, up is : {{P1.keys.keyup}} and down is {{P1.keys.keydown}}</p>
     <p>player 2  name :{{P2.name}}, up is : {{P2.keys.keyup}} and down is {{P2.keys.keydown}}</p>
-
+    <p> </p>
     <input type="text" id="messageInput" placeholder="Type a message" />
     <button onclick="sendMessage()">Send Message</button>
 
@@ -65,14 +65,14 @@
         
         // When the WebSockett connection is opened
         sockett.onopen = function(event) {
-            console.log("WebSockett is open now.");
+            // console.log("WebSockett is open now.");
             // Optionally, you can send a message to the server to initialize game state
             // sockett.send(JSON.stringify({ 'type' : 'init' }));
         };
 
         // When the WebSockett connection is closed
         sockett.onclose = function(event) {
-            console.log("WebSockett is closed.");
+            // console.log("WebSockett is closed.");
         };
 
         // Handle errors
@@ -83,6 +83,8 @@
         let pressedKeys = {};
 
         const keyMappings = {
+            'f'                    : { player: '{{P1.name}}', action: 'gs' },
+            'r'                    : { player: '{{P2.name}}', action: 'gs' },
             '{{P1.keys.keyup  }}'  : { player: '{{P1.name}}', action: 'up' },
             '{{P1.keys.keydown}}'  : { player: '{{P1.name}}', action: 'down' },
             '{{P2.keys.keyup  }}'  : { player: '{{P2.name}}', action: 'up' },
@@ -100,6 +102,7 @@
                     });
                 }
             });
+
             if (actions.length > 0){
                 sockett.send(JSON.stringify(actions))
             }
@@ -107,7 +110,7 @@
         
         document.addEventListener('keydown', function(event){
             const key = event.key.toLowerCase();
-            console.log(key)
+            // console.log(key)
             if (!pressedKeys[key]){
                 pressedKeys[key] = true;
             }
