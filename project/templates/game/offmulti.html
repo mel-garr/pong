@@ -84,12 +84,12 @@
         let pressedKeys = {};
 
         const keyMappings = {
-            'f'                    : { player: '{{P1.name}}', action: 'gs' },
-            'r'                    : { player: '{{P2.name}}', action: 'gs' },
-            '{{P1.keys.keyup  }}'  : { player: '{{P1.name}}', action: 'up' },
-            '{{P1.keys.keydown}}'  : { player: '{{P1.name}}', action: 'down' },
-            '{{P2.keys.keyup  }}'  : { player: '{{P2.name}}', action: 'up' },
-            '{{P2.keys.keydown}}'  : { player: '{{P2.name}}', action: 'down' },
+            'f'                    : { player: '{{P1.name}}', action: 'gs'  , type: 'gs'},
+            'r'                    : { player: '{{P2.name}}', action: 'gs'  , type: 'gs'},
+            '{{P1.keys.keyup  }}'  : { player: '{{P1.name}}', action: 'up'  , type: 'move'},
+            '{{P1.keys.keydown}}'  : { player: '{{P1.name}}', action: 'down', type: 'move' },
+            '{{P2.keys.keyup  }}'  : { player: '{{P2.name}}', action: 'up'  , type: 'move'},
+            '{{P2.keys.keydown}}'  : { player: '{{P2.name}}', action: 'down', type: 'move'},
         }
         
         function sendPressedKeys(){
@@ -99,7 +99,8 @@
                 if (mapping){
                     actions.push({
                         player : mapping.player,
-                        action : mapping.action 
+                        action : mapping.action,
+                        type : mapping.type,
                     });
                 }
             });

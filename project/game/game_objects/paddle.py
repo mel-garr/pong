@@ -1,3 +1,4 @@
+
 # anbedel had base.width/heigh mnin ndeber fchi db bach automotiauement tqkhdhoum mn tem
 # wid spells 
 
@@ -31,14 +32,8 @@ class Paddle:
         }
     
     async def update(self, move):
-
-        if move == 'up' :
-            self.y = min()
-            if (self.y + self.width / 2) >= 600 or (self.y - self.radius) <= 0:
-            self.dy *= -1
+        if (move == 'up'):
+            self.y = max(0, self.y - self.dy)
         
-        # if (self.x >= 800 - self.radius) or (self.x - self.radius) <= 0:
-            # self.dx *= -1
-
-        self.x += self.dx
-        self.y += self.dy
+        if (move == 'down'):
+            self.y = min(600 - self.height , self.y + self.dy)

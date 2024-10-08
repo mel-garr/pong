@@ -75,6 +75,7 @@ class Game:
     def is_player_in(self, pl_name, teamplayers):
         return any(pl.name == pl_name for pl in teamplayers)
 
+
     async def updateGameState(self, update):
         print ('play_statue: ', self.playplayer)
         print ('after change:' ,self.gamestatus)
@@ -96,20 +97,31 @@ class Game:
         return 1
         
     async def updateball(self):
-        # print('ja l update ball')
-        # print('ball x:' ,self.x)
-        # print('ball x:' ,self.y)
         if self.gamestatus == 'gamestart':
             await self.ballside.updateball()
 
+    async def witch_player(self, name):
+        for player in self.redteamplayers:
+            if player.name == name:
+                return player
+
+        for player in self.blueteamplayers:
+            if player.name == name:
+                return player
+        print ('error witchplayer')
+        return (None)
 
     async def updategame(self, update):
-        print('ja l update game')
+        print(update)
         if not await self.updateGameState(update):
             return
         if self.gamestatus == 'gamestart':
-            # self.updateball()
-            print ('sala update')
+            for pl in update:
+                if (pl['type'] == 'move'):
+                    player = await self.witch_player(pl['player'])
+                    if player:
+                        await player.paddle.update(pl['action'])
+            # self.checkcolision()
             return 
 
 
