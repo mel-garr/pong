@@ -35,6 +35,7 @@ class Ball:
         
         if (self.x >= 800 - self.radius) or (self.x - self.radius) <= 0:
             self.dx *= -1
+            #need to update the game and score if x
 
         self.x += self.dx
         self.y += self.dy

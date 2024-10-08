@@ -30,6 +30,10 @@ class Game:
         self.bluefield = None
         self.bluescore = 0
 
+        #gameplay
+        self.game_objects = []
+        #add so;ething to hold balls and multiple balls
+        #what avout ndir wahed taystori hir lbalss ou wa7ed akhour taystori bonuses
         
     async def initialize_game(self, room):
         self.redteamplayers = await self.initteam(room.redteamplayers)
@@ -96,9 +100,6 @@ class Game:
                         return 0
         return 1
         
-    async def updateball(self):
-        if self.gamestatus == 'gamestart':
-            await self.ballside.updateball()
 
     async def witch_player(self, name):
         for player in self.redteamplayers:
@@ -111,6 +112,16 @@ class Game:
         print ('error witchplayer')
         return (None)
 
+    async def updateball(self):
+        if self.gamestatus == 'gamestart':
+            #add to ball side the list of bonuses
+            await self.ballside.updateball(self.redscore, self.bluescore)
+            #check if score is game over -> reset game
+            #check colision with boost
+
+    async def checkcolision_player(self, player):
+
+
     async def updategame(self, update):
         print(update)
         if not await self.updateGameState(update):
@@ -121,6 +132,7 @@ class Game:
                     player = await self.witch_player(pl['player'])
                     if player:
                         await player.paddle.update(pl['action'])
+                    await self.checkcolision_player(player)
             # self.checkcolision()
             return 
 
@@ -129,6 +141,7 @@ class Game:
             #updtae status --> done ?
             #update ball
             #update player
+            #update score
         
 
 
@@ -149,3 +162,10 @@ class Game:
             'bluefield'      : (self.bluefield).serialize(),
             'bluescore'      : self.bluescore,
         }
+
+
+
+
+        await def add_new_bonus(self):
+            new_bonus = Bonus(500, 100)
+            self.game_objects.append(new_bonus)
