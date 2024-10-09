@@ -124,9 +124,11 @@ class Game:
             #add to ball side the list of bonuses
             for player in self.blueteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
+            # print ('ja hnaya')
             for player in self.redteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
-            for ballo in game_balls:
+            # self.ballside.updateball()
+            for ballo in self.game_balls:
                 await ballo.updateball(self.redscore, self.bluescore)
             # if len(self.game_balls) == 0:
             #     await self.reset_new_ball()
