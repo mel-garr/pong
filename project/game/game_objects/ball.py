@@ -28,17 +28,22 @@ class Ball:
             'color' : self.color,
         }
     
-    async def updateball(self):
+    async def updateball(self, PS1, PS2):
     
         if (self.y + self.radius) >= 600 or (self.y - self.radius) <= 0:
             self.dy *= -1
         
         if (self.x >= 800 - self.radius) or (self.x - self.radius) <= 0:
             self.dx *= -1
+            # return (0)
+        # return 1
             #need to update the game and score if x
 
         self.x += self.dx
         self.y += self.dy
+
+    async def ball_interaction(self):
+        self.dx *= -1
 
     
 

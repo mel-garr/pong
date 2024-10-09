@@ -37,3 +37,22 @@ class Paddle:
         
         if (move == 'down'):
             self.y = min(600 - self.height , self.y + self.dy)
+
+    async def checkcolision_s(self, obj):
+        return (
+            obj.x + obj.radius > self.x and
+            obj.x - obj.radius < self.x + self.width and  
+            obj.y + obj.radius > self.y and 
+            obj.y - obj.radius < self.y + self.height
+        )
+
+
+    async def checkcolision(self, bonus, objects):
+        for obj in objects:
+            if (await self.checkcolision_s(obj)):
+                await obj.ball_interaction()
+        # for obj in bonus:
+        #     if (await checkcolision_s(obj)):
+        #         await obj.bonus_interaction()
+                
+    

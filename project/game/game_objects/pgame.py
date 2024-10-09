@@ -32,6 +32,7 @@ class Game:
 
         #gameplay
         self.game_objects = []
+        self.game_balls = []
         #add so;ething to hold balls and multiple balls
         #what avout ndir wahed taystori hir lbalss ou wa7ed akhour taystori bonuses
         
@@ -46,6 +47,7 @@ class Game:
         
         self.ballside = await self.getballside()  
         self.playplayer = await self.getpauseplayer()
+        self.game_balls.append(self.ballside)
 
     async def initteam(self, team, side='red'):
         squad = []
@@ -112,18 +114,32 @@ class Game:
         print ('error witchplayer')
         return (None)
 
+    async def reset_new_ball(self):
+        #reset game status
+        #generate new ball depending on the player with lower score ,
+        pass
+
     async def updateball(self):
         if self.gamestatus == 'gamestart':
             #add to ball side the list of bonuses
-            await self.ballside.updateball(self.redscore, self.bluescore)
+            for player in self.blueteamplayers:
+                await player.paddle.checkcolision(self.game_objects, self.game_balls)
+            for player in self.redteamplayers:
+                await player.paddle.checkcolision(self.game_objects, self.game_balls)
+            for ballo in game_balls:
+                await ballo.updateball(self.redscore, self.bluescore)
+            # if len(self.game_balls) == 0:
+            #     await self.reset_new_ball()
             #check if score is game over -> reset game
             #check colision with boost
+            # self.checkcolision()
 
-    async def checkcolision_player(self, player):
+    # async def checkcolision_player(self, player):
 
 
     async def updategame(self, update):
         print(update)
+        print (self.game_balls)
         if not await self.updateGameState(update):
             return
         if self.gamestatus == 'gamestart':
@@ -132,9 +148,6 @@ class Game:
                     player = await self.witch_player(pl['player'])
                     if player:
                         await player.paddle.update(pl['action'])
-                    await self.checkcolision_player(player)
-            # self.checkcolision()
-            return 
 
 
         #     pass
@@ -166,6 +179,6 @@ class Game:
 
 
 
-        await def add_new_bonus(self):
+        async def add_new_bonus(self):
             new_bonus = Bonus(500, 100)
             self.game_objects.append(new_bonus)
