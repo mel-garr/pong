@@ -16,8 +16,9 @@ class Ball:
         self.radius = ball_typo[base.ball][3]
         self.color = ball_typo[base.ball][4]
         self.side = side
-        self.dx = ball_typo[base.ball][5]
-        self.dy = ball_typo[base.ball][5]
+        self.dx = ball_typo[base.ball][5] 
+        self.dy = ball_typo[base.ball][5] 
+        self.lasttouch = None
 
     def serialize(self):
         return {
@@ -42,9 +43,12 @@ class Ball:
         self.x += self.dx
         self.y += self.dy
 
-    async def ball_interaction(self):
+    async def ball_interaction(self, paddle):
+        self.lasttouch = paddle.name
         self.dx *= -1
 
+    async def ball_colision_bonus(self, objects):
+        pass
     
 
     

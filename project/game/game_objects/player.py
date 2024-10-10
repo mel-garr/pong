@@ -8,7 +8,7 @@ class Player:
         self.name = base.name
         # self.side = side
         # data token from the object position
-        self.paddle = Paddle(base, side, i)
+        self.paddle = Paddle(base, side, i, self.name)
         self.ball = Ball(base, side)
         self.field = Field(base, side)
 

@@ -13,8 +13,9 @@ paddle_type = {
 paddle_spacing = 10
 
 class Paddle:
-    def __init__(self, base, side, i):
+    def __init__(self, base, side, i, name):
         j = 0 if side == 'red' else 800
+        self.name = name
         self.width = paddle_type[base.paddle][0]
         self.height = paddle_type[base.paddle][1]
         self.color = paddle_type[base.paddle][2]
@@ -39,6 +40,7 @@ class Paddle:
             self.y = min(600 - self.height , self.y + self.dy)
 
     async def checkcolision_s(self, obj):
+
         return (
             obj.x + obj.radius > self.x and
             obj.x - obj.radius < self.x + self.width and  
@@ -50,7 +52,8 @@ class Paddle:
     async def checkcolision(self, bonus, objects):
         for obj in objects:
             if (await self.checkcolision_s(obj)):
-                await obj.ball_interaction()
+                await obj.ball_interaction(self)
+
         # for obj in bonus:
         #     if (await checkcolision_s(obj)):
         #         await obj.bonus_interaction()

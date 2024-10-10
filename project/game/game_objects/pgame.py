@@ -2,9 +2,11 @@
 from ..models import *
 from . import *
 from .player import Player
+from .powerup import Powerup
 import random
 from asgiref.sync import sync_to_async
-
+import time
+import asyncio
 
 class Game:
     def __init__(self, room):
@@ -33,6 +35,8 @@ class Game:
         #gameplay
         self.game_objects = []
         self.game_balls = []
+        self.lastpowerup = None
+        self.powerup_task = None
         #add so;ething to hold balls and multiple balls
         #what avout ndir wahed taystori hir lbalss ou wa7ed akhour taystori bonuses
         
@@ -48,6 +52,8 @@ class Game:
         self.ballside = await self.getballside()  
         self.playplayer = await self.getpauseplayer()
         self.game_balls.append(self.ballside)
+
+        self.lastpowerup = time.time()
 
     async def initteam(self, team, side='red'):
         squad = []
@@ -119,17 +125,44 @@ class Game:
         #generate new ball depending on the player with lower score ,
         pass
 
+    async def spawn_powerup(self):
+        print ('16')
+        while self.gamestatus == 'gamestart':
+            await asyncio.sleep(5)
+            power = Powerup()
+            print ('ja lspawn')
+            print (len( self.game_objects.append))
+
+            self.game_objects.append(power)
+            print (len( self.game_objects.append))
+            exit()
+
+    async def drop_bonus(self):
+        pass
+
+
     async def updateball(self):
         if self.gamestatus == 'gamestart':
             #add to ball side the list of bonuses
             for player in self.blueteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
-            # print ('ja hnaya')
+            print ('ja hnaya l update')
             for player in self.redteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
             # self.ballside.updateball()
             for ballo in self.game_balls:
                 await ballo.updateball(self.redscore, self.bluescore)
+            
+
+            
+            # current_time = time.time()
+            # if current_time - self.lastpowerup >= 5:
+            #     print('jit hnaya')
+            #     powerup = Powerup()
+            #     self.game_objects.append(powerup)
+            #     self.lastpowerup = current_time
+            
+            
             # if len(self.game_balls) == 0:
             #     await self.reset_new_ball()
             #check if score is game over -> reset game
@@ -141,10 +174,16 @@ class Game:
 
     async def updategame(self, update):
         print(update)
-        print (self.game_balls)
+        print (self.powerup_task)
         if not await self.updateGameState(update):
             return
         if self.gamestatus == 'gamestart':
+            print ('lolo : ', self.powerup_task)
+            if self.powerup_task is None:
+                print('12')
+                exit()
+                self.powerup_task = asyncio.create_task(self.spawn_powerup())
+
             for pl in update:
                 if (pl['type'] == 'move'):
                     player = await self.witch_player(pl['player'])
@@ -176,6 +215,10 @@ class Game:
             # 'blueteamball'   : (self.blueteamball).serialize(),
             'bluefield'      : (self.bluefield).serialize(),
             'bluescore'      : self.bluescore,
+            'powerup'        : [powerup.serialize() for powerup in self.game_objects],
+            'balls'          : [ball.serialize() for ball in self.game_balls],
+            # 'powerup'        : self.game_objects,
+            # 'balls'          : self.game_balls
         }
 
 

@@ -47,11 +47,6 @@
             ctx.fillRect(0, 0, data.redfield.width, data.redfield.height);
             ctx.fillStyle = data.bluefield.color;
             ctx.fillRect(data.redfield.width, 0, data.bluefield.width, data.bluefield.height);
-            ctx.fillStyle = data.ballside.color;
-            ctx.beginPath();
-            ctx.arc(data.ballside.x, data.ballside.y, data.ballside.radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.closePath();
             data.redteamplayers.forEach((player)=>{
                 // console.log('redplayer' , player.name);
                 ctx.fillStyle = player.paddle.color;
@@ -61,6 +56,24 @@
                 // console.log('blueplayer' , wplayer.name);
                 ctx.fillStyle = player.paddle.color;
                 ctx.fillRect(player.paddle.x, player.paddle.y, player.paddle.width, player.paddle.height);
+            });
+            console.log(data.powerup.length)
+            data.powerup.forEach((powerups)=>{
+                console.log('ja hnaya:', powerup.color)
+
+                ctx.fillStyle = powerup.color;
+                ctx.beginPath();
+                ctx.arc(powerup.x, powerup.y, powerup.radius, 0, Math.PI*2);
+                ctx.fill();
+                ctx.closePath();
+            });
+            data.balls.forEach((ball)=>{
+                console.log('colro dyal lball:', ball.color)
+                ctx.fillStyle = ball.color;
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.closePath();
             });
         } 
         
@@ -111,6 +124,9 @@
         }
         
         document.addEventListener('keydown', function(event){
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown'){
+                event.preventDefault();
+            }
             const key = event.key.toLowerCase();
             // console.log(key)
             if (!pressedKeys[key]){
@@ -123,11 +139,20 @@
             const key = event.key.toLowerCase();
             if (pressedKeys[key]){
                 delete pressedKeys[key];
-                // sendata('keyup', event.key);
+                // senball('keyup', event.key);
             }
             sendPressedKeys();
         });
         </script>
 </body>
 </html>
+<!-- 
 
+// document.addEventListener('keydown', function(event){
+//     const key = event.key.toLowerCase();
+//     // console.log(key)
+//     if (!pressedKeys[key]){
+//         pressedKeys[key] = true;
+//     }
+//     sendPressedKeys();            
+// }); -->
