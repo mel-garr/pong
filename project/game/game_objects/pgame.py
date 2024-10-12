@@ -37,6 +37,7 @@ class Game:
         self.game_balls = []
         self.lastpowerup = None
         self.powerup_task = None
+        self.working_on_pp = 0
         #add so;ething to hold balls and multiple balls
         #what avout ndir wahed taystori hir lbalss ou wa7ed akhour taystori bonuses
         
@@ -125,20 +126,26 @@ class Game:
         #generate new ball depending on the player with lower score ,
         pass
 
-    async def spawn_powerup(self):
-        print ('16')
-        while self.gamestatus == 'gamestart':
-            await asyncio.sleep(5)
-            power = Powerup()
-            print ('ja lspawn')
-            print (len( self.game_objects.append))
+    # async def spawn_powerup(self):
+    #     print ('16')
+    #     while self.gamestatus == 'gamestart':
+    #         await asyncio.sleep(5)
+    #         power = Powerup()
+    #         print ('ja lspawn')
+    #         print (len( self.game_objects.append))
 
-            self.game_objects.append(power)
-            print (len( self.game_objects.append))
-            exit()
+    #         self.game_objects.append(power)
+    #         print (len( self.game_objects.append))
+    #         exit()
 
     async def drop_bonus(self):
-        pass
+        if self.gamestatus == 'gamestart' and not self.working_on_pp:
+            self.working_on_pp = 1
+            await asyncio.sleep(4)
+            powerup = Powerup()
+            self.game_objects.append(powerup)
+            # print ('yoo')
+            self.working_on_pp = 0
 
 
     async def updateball(self):
@@ -146,13 +153,32 @@ class Game:
             #add to ball side the list of bonuses
             for player in self.blueteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
-            print ('ja hnaya l update')
+            # print ('ja hnaya l update')
             for player in self.redteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
             # self.ballside.updateball()
             for ballo in self.game_balls:
                 await ballo.updateball(self.redscore, self.bluescore)
             
+            # asyncio.drop_bonus()
+
+            # await asyncio.sleep(20)
+            
+    async def updategame(self, update):
+        print(update)
+        print (self.powerup_task)
+        if not await self.updateGameState(update):
+            return
+        if self.gamestatus == 'gamestart':
+            print ('lolo : ', self.powerup_task)
+            # if self.powerup_task is None:
+            #     self.powerup_task = asyncio.create_task(self.spawn_powerup())
+
+            for pl in update:
+                if (pl['type'] == 'move'):
+                    player = await self.witch_player(pl['player'])
+                    if player:
+                        await player.paddle.update(pl['action'])
 
             
             # current_time = time.time()
@@ -172,23 +198,6 @@ class Game:
     # async def checkcolision_player(self, player):
 
 
-    async def updategame(self, update):
-        print(update)
-        print (self.powerup_task)
-        if not await self.updateGameState(update):
-            return
-        if self.gamestatus == 'gamestart':
-            print ('lolo : ', self.powerup_task)
-            if self.powerup_task is None:
-                print('12')
-                exit()
-                self.powerup_task = asyncio.create_task(self.spawn_powerup())
-
-            for pl in update:
-                if (pl['type'] == 'move'):
-                    player = await self.witch_player(pl['player'])
-                    if player:
-                        await player.paddle.update(pl['action'])
 
 
         #     pass

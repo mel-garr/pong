@@ -57,18 +57,19 @@
                 ctx.fillStyle = player.paddle.color;
                 ctx.fillRect(player.paddle.x, player.paddle.y, player.paddle.width, player.paddle.height);
             });
-            console.log(data.powerup.length)
+            console.log('length of powerup: ' ,data.powerup.length)
             data.powerup.forEach((powerups)=>{
-                console.log('ja hnaya:', powerup.color)
+                // console.log('yoo')
+                // console.log('ja hnaya:', powerups.color)
 
-                ctx.fillStyle = powerup.color;
+                ctx.fillStyle = powerups.color;
                 ctx.beginPath();
-                ctx.arc(powerup.x, powerup.y, powerup.radius, 0, Math.PI*2);
+                ctx.arc(powerups.x, powerups.y, powerups.radius, 0, Math.PI*2);
                 ctx.fill();
                 ctx.closePath();
             });
             data.balls.forEach((ball)=>{
-                console.log('colro dyal lball:', ball.color)
+                // console.log('colro dyal lball:', ball.color)
                 ctx.fillStyle = ball.color;
                 ctx.beginPath();
                 ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);

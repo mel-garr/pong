@@ -13,7 +13,6 @@
         #magic invsibility freez_everything_except_the_player
 
 import random
-import threading
 
 powerup_type = {
     'a' : ['paddleB','red', 5],   #bigger paddle
@@ -23,19 +22,14 @@ powerup_type = {
 class Powerup:
     def __init__(self):
         powerup = random.choice(list(powerup_type.items()))
+        # print ('jit foust powerup-----------------------')
         self.name = powerup[0]
-        self.color = powerup[1][0]
-        self.radius = powerup[1][1]
+        self.color = powerup[1][1]
+        self.radius = powerup[1][2]
     # self.name = powerup_type[0]
-        self.x = random.randint(self.radius, 800 - self.R)
-        self.y = random.randint(self.radius, 600 - self.R)
-        print ('jit foust powerup')
+        self.x = random.randint(self.radius, 800 - self.radius)
+        self.y = random.randint(self.radius, 600 - self.radius)
         
-    # async def spawn_powerup():
-    #     powerup = Powerup()
-    #     print(f"Bonus spawned: {bonus.name} at ({bonus.x}, {bonus.y})")
-
-    #     threading.Timer(20, spawn_)
 
     def serialize(self):
         return {
@@ -45,3 +39,10 @@ class Powerup:
             'radius': self.radius,
             'color' : self.color,
         }
+
+    async def spawn_powerup():
+        powerup = Powerup()
+        print(f"Bonus spawned: {bonus.name} at ({bonus.x}, {bonus.y})")
+
+        await asyncio.sleep(5)
+        return powerup

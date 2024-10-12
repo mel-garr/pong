@@ -36,6 +36,7 @@ class gameConsumer(AsyncWebsocketConsumer):
                 break
 
             await active_games[self.room_n].updateball()
+            asyncio.create_task(active_games[self.room_n].drop_bonus())
             serialized_data = active_games[self.room_n].serialize_game_data()
 
             await self.channel_layer.group_send(
