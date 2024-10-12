@@ -5,6 +5,8 @@ from .field import Field
 
 class Player:
     def __init__(self, base, i, side='red'):
+        print('hadi base: ', base)
+        self.id = base.id
         self.name = base.name
         # self.side = side
         # data token from the object position

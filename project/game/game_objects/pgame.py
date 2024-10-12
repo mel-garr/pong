@@ -14,7 +14,9 @@ class Game:
         self.gamestatus = room.gamestatus
         self.gametype = room.gametype
         self.winningteam = room.winning_team
-        self.max_score = room.max_score
+        # self.max_score = room.max_score
+        self.max_score = 1
+
 
         #
         self.ballside = None
@@ -216,7 +218,7 @@ class Game:
                 if (pl['type'] == 'move'):
                     player = await self.witch_player(pl['player'])
                     if player:
-                        print (player.name)
+                        # print (player.name)
                         await player.paddle.update(pl['action'])
 
             

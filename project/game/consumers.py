@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from .game_objects.pgame import *
 from .models import *
 from channels.db import database_sync_to_async
+from .gameutils import *
 
 active_games = {}
 
@@ -41,6 +42,7 @@ class gameConsumer(AsyncWebsocketConsumer):
             # print (serialized_data['status'])
             if serialized_data['status'] == 'ended':
                 print ('yoo2yoo')
+                await GaneSumm(active_games[self.room_n])
 
             await self.channel_layer.group_send(
                 self.room_group_name, {
@@ -64,7 +66,6 @@ class gameConsumer(AsyncWebsocketConsumer):
         self.update_task.cancel()
 
     async def receive(self, text_data):
-        print ('jq lrecivew')
         update = json.loads(text_data)
         # print (update)
         await active_games[self.room_n].updategame(update)

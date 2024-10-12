@@ -100,6 +100,7 @@ def setuplobbyoff(request):
                 seen.add(data[field])
 
             P1 = playerData(
+                
                 name = data['p1nickname'],
                 paddle = data['p1paddle'],
                 ball = data['p1ball'],

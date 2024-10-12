@@ -99,7 +99,7 @@ class roomData(models.Model):
     gametype = models.CharField(max_length=10, choices = room_type ,default='offline')
     gamestatus = models.CharField(max_length=10, choices = status_choice ,default='gamestart')
     winning_team = models.CharField(max_length=10, choices = team ,default='tie')
-    max_score = models.IntegerField(default=2)
+    max_score = models.IntegerField(default=1)
 
     redteamplayers = models.ManyToManyField(playerData, related_name='red_team')
     redteamScore = models.IntegerField(default=0)
@@ -118,3 +118,17 @@ class playerSettings(models.Model):
 
     def __str__(self):
         return f"{self.player.name}'s settings"
+
+class Gamesumm(models.Model):
+    gametype = models.CharField(max_length=50)
+
+    redteam_players = models.ManyToManyField(playerData, related_name='redteam_players')
+    redteam_Score = models.IntegerField(default=0)
+
+    blueteamp_players = models.ManyToManyField(playerData, related_name='blueteamp_layers')
+    blueteam_Score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.id)
+
+

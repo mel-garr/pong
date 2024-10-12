@@ -7,5 +7,7 @@ admin.site.register(RoomL)
 admin.site.register(playerData)
 admin.site.register(roomData)
 admin.site.register(playerSettings)
+admin.site.register(Gamesumm)
+
 
 
