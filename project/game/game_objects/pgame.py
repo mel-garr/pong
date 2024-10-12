@@ -50,9 +50,9 @@ class Game:
         self.blueteamball = await self.getball(self.blueteamplayers)
         self.bluefield = await self.getfield(self.blueteamplayers)
         
-        self.ballside = await self.getballside()  
-        self.playplayer = await self.getpauseplayer()
-        self.game_balls.append(self.ballside)
+        self.ballside = await self.getballside()
+        # self.pa self.getpauseplayer()
+        # self.game_balls.append(self.ballside)
 
         self.lastpowerup = time.time()
 
@@ -78,11 +78,22 @@ class Game:
         return avatar.field if avatar else None
     
     async def getballside(self):
-        return random.choice([self.redteamball, self.blueteamball])
+
+                
+
+        self.gamestatus = 'pause'
+        new_ball = await self.redteamball.clone() if self.redscore < self.bluescore else await self.blueteamball.clone() if self.redscore > self.bluescore else random.choice([await self.redteamball.clone(), await self.blueteamball.clone()])
+        self.playplayer = new_ball.side
+        # self.playplayer = await self.getpauseplayer()
+        self.game_balls.append(new_ball)
+        if self.redscore >= self.max_score or self.bluescore >= self.max_score:
+            self.gamestatus = 'ended'
+        # return new_ball
 
     def start_game(self):
         print ('AAAA')
         print ('game_statue: ', self.gamestatus)
+
 
 
     def is_player_in(self, pl_name, teamplayers):
@@ -90,8 +101,6 @@ class Game:
 
 
     async def updateGameState(self, update):
-        print ('play_statue: ', self.playplayer)
-        print ('after change:' ,self.gamestatus)
         if self.gamestatus == 'pause':
             teamgs = self.blueteamplayers if self.playplayer == 'blue' else self.redteamplayers
             for k in update:
@@ -139,38 +148,67 @@ class Game:
     #         exit()
 
     async def drop_bonus(self):
-        if self.gamestatus == 'gamestart' and not self.working_on_pp:
+        if self.gamestatus == 'gamestart' and not self.working_on_pp and len(self.game_objects) < 3:
             self.working_on_pp = 1
             await asyncio.sleep(4)
             powerup = Powerup()
             self.game_objects.append(powerup)
-            # print ('yoo')
             self.working_on_pp = 0
+        # pass
 
+
+    async def reset_ball(self):
+        if self.gamestatus == 'gamestart':
+            # print('jit hnaya 2')
+            await self.getballside()
 
     async def updateball(self):
+        # print ('gamestatus mn updateballl: ', self.gamestatus)
+        if self.redscore >= self.max_score or self.bluescore >= self.max_score:
+                print ('game_salat: ', self.game_status)
+                self.winningteam = 'Red Won' if self.redscore > self.max_score else 'BLue Won'
+                self.gamestatus == 'ended'
         if self.gamestatus == 'gamestart':
-            #add to ball side the list of bonuses
+            
             for player in self.blueteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
-            # print ('ja hnaya l update')
             for player in self.redteamplayers:
                 await player.paddle.checkcolision(self.game_objects, self.game_balls)
-            # self.ballside.updateball()
             for ballo in self.game_balls:
-                await ballo.updateball(self.redscore, self.bluescore)
-            
+                scores = await ballo.updateball([self.redscore, self.bluescore])
+                if scores[0] != self.redscore or scores[1] != self.bluescore:
+                    self.redscore, self.bluescore = scores
+                    self.game_balls.remove(ballo)
+            if len(self.game_balls) == 0:
+                # print('jit hnaya')
+                await self.reset_ball()
+
+            # print ('redteamscore: ', self.redscore)
+            # print ('blueteamscore: ', self.bluescore)
+            # print ('max score is: ', self.max_score)
+            # print ('gamestatus: ', self.gamestatus)
+            # print ('gamestatus: ', self.gamestatus)
+
+#
+
+            if self.gamestatus == 'ended':
+                #do logique to :
+                #-->store data in model
+                #-->delete room and players can't join it anymore
+                print ('handel ended pls')
+
             # asyncio.drop_bonus()
 
             # await asyncio.sleep(20)
             
     async def updategame(self, update):
         print(update)
-        print (self.powerup_task)
+        # print ('gamestatus mn updateball: ', self.gamestatus)
+
         if not await self.updateGameState(update):
             return
         if self.gamestatus == 'gamestart':
-            print ('lolo : ', self.powerup_task)
+            # print ('lolo : ', self.powerup_task)
             # if self.powerup_task is None:
             #     self.powerup_task = asyncio.create_task(self.spawn_powerup())
 
@@ -178,6 +216,7 @@ class Game:
                 if (pl['type'] == 'move'):
                     player = await self.witch_player(pl['player'])
                     if player:
+                        print (player.name)
                         await player.paddle.update(pl['action'])
 
             
@@ -217,7 +256,7 @@ class Game:
             'gametype'       : self.gametype,
             'winningteam'    : self.winningteam,
             'max_score'      : self.max_score,
-            'ballside'       : (self.ballside).serialize(),
+            # 'ballside'       : (self.ballside).serialize(),
             # 'redteamball'    : (self.redteamball).serialize(),
             'redfield'       : (self.redfield).serialize(),
             'redscore'       : self.redscore,

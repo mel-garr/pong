@@ -286,3 +286,11 @@
 
 
         #     return 
+
+            if (self.x >= 800 - self.radius) <= 0:
+            PS1 += 1
+            self.dx *= -1
+
+        if (self.x - self.radius) <= 0:
+            PS2 += 1
+            self.dx *= -1

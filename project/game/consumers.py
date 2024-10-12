@@ -38,6 +38,9 @@ class gameConsumer(AsyncWebsocketConsumer):
             await active_games[self.room_n].updateball()
             asyncio.create_task(active_games[self.room_n].drop_bonus())
             serialized_data = active_games[self.room_n].serialize_game_data()
+            # print (serialized_data['status'])
+            if serialized_data['status'] == 'ended':
+                print ('yoo2yoo')
 
             await self.channel_layer.group_send(
                 self.room_group_name, {
