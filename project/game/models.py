@@ -94,6 +94,7 @@ class roomData(models.Model):
     ('red', 'Red'),
     ]
 
+    # owner = models.CharField(max_length=50, blank=False, null=False)
     name = models.CharField(max_length=50, blank=False, null=False)
     uniq_id = models.CharField(max_length=50, blank=True, null=True)
     gametype = models.CharField(max_length=10, choices = room_type ,default='offline')

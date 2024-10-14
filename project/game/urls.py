@@ -7,6 +7,8 @@ urlpatterns = [
     path('auth-status/', check_login_status, name='auth_status'),
     path('login/', login, name='loginO'),
     path('lobby/', lobby, name='lobby'),
+    path('lobbyon/', lobbyon, name='lobbyon'),
+
     path('setuplobbyoff/', setuplobbyoff, name='setuplobbyoff'),
     path('<int:room_id>/', offmulti_view, name='offmulti'),
 ]

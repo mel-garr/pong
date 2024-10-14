@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>online</title>
+    <style>
+        body{
+            margin: 0;
+            height: 100vh;
+            /* display: flex; */
+        }
+        .allData{
+            /* width: inherit;
+            height: inherit; */
+            display: flex;
+            flex-wrap: wrap;
+            /* width: 100%; */
+            height: 100%;
+        }
+        .divs{
+            /* border: black 5px solid; */
+            /* align-items: center; */
+            /* justify-content: center; */
+            display: flex;
+            height: 50%;
+            flex: 1 0 50%;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="allData">
+        <div class="divs">
+            <template id="player-options-template">
+                <option value="default">default</option>
+                <option value="type1">type1</option>
+                <option value="type2">type2</option>
+            </template>
+        
+        <div class="player1">
+            <div>player1 data</div>
+            <input class="nicnamep1" placeholder="nickname" required><br>
+            paddle<select class="paddlep1" ></select><br>
+            field<select class="fieldp1" ></select><br>
+            ball<select class="ballp1" ></select><br>
+        </div>
+        
+            </div>
+        <div class="divs lobbyroom" > lobby to see what did the players chosed</div>
+        <div class="divs">
+            <div class="settings">
+                <h2>settings</h2>
+                    <div class="option_setting">
+                        <div class="player1movset">
+                            <div>player1 movset</div>
+                            keyup<input class="keyupp1" placeholder="keyup" value='w' required><br>
+                            keydown<input class="keydownp1" placeholder="keydown" value='s' required><br>                    
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="divs"> 
+            <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+            <input id="chat-message-input" type="text" size="100"><br>
+            <input id="chat-message-submit" type="button" value="Send">
+        </div>
+
+    </div>
+
+     
+    <script>
+        const template = document.getElementById('player-options-template');
+        const selectElements = document.querySelectorAll('select');
+    
+        selectElements.forEach(select => {
+            const options = template.content.cloneNode(true);
+            select.appendChild(options);
+        });
+    </script>
+    <script>
+        console.log('testi hadi:' ,'{{user}}');
+        const chatsocket = new WebSocket('ws://${window.location.host}/ws/onlinelobby/{{user}}/')
+    chatsocket.onmessage = function(event){
+        console.log('connection done!!');
+        const data = JSON.parse(event.data);
+        update_onlobby(data);
+    }
+
+    chatsocket.onclose = function(event){
+        console.log('connection ended!!');
+
+    }
+
+    </script>
+</body>
+</html>

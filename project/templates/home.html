@@ -100,6 +100,7 @@
         </div>
         <div class="games_starter_pack game_pong_mode_Monline">
             <!-- multi-online -->
+            <button class="play-pong-online">Start game</button>
             <button class="go-back-pong">GO back</button>
         </div>
         <div class="games_starter_pack game_pong_mode_tournament">
@@ -113,6 +114,12 @@
             sessionStorage.setItem('selectedGame', 'pong');
             sessionStorage.setItem('selectedMode', 'Challenge');
             window.location = '/game/lobby/';
+        }
+
+        document.querySelector('.play-pong-online').onclick = function(){
+            sessionStorage.setItem('selectedGame', 'pong');
+            sessionStorage.setItem('selectedMode', 'multiOn');
+            window.location = '/game/lobbyon/';
         }
     </script>
 
@@ -293,6 +300,7 @@
             });
         });
 
+        sessionStorage.setItem('owner', 'value'); //--> hadi tbedel bluser
         function getCookie(name){
             let cookieValue = null;
             if (document.cookie && document.cookie !== ''){

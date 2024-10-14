@@ -150,7 +150,20 @@ def offmulti_view(request, room_id):
         return JsonResponse({'status':'errro', 'message':str(e)}, status=500)
 
     return render(request, 'game/offmulti.html', {'room_id' : room_id, 'P1' : P1, 'P2' : P2})
-        # return render(request, 'game/offmulti.html', {'room' : room, 'game' : game})
 
-    
-    # return JsonResponse({'status': 'not ok'}, status=405) 
+
+
+def lobbyon(request):
+    context = {}
+    try :
+        user_id = request.session.get('user_id')
+        print(user_id)
+        if user_id:
+            user = UserL.objects.get(id=user_id)
+            context = {'user': user}
+        else:
+            context = {}
+    except:
+            context ={}
+    return render(request, 'game/lobbyon.html', context)
+

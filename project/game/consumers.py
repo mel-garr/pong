@@ -87,3 +87,16 @@ class gameConsumer(AsyncWebsocketConsumer):
     #     player = next((player for player in active_games[self.room_n].redteamplayers + active_games[self.room_n].blueteamplayers if player.name == player_name), None)
         
     #     await self.handle_player_action(player_name, action_type, action)
+
+
+class OnLobbyConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        print('yoo')
+
+
+    async def disconnect(self, code):
+        pass
+
+    async def receive(self, content):
+        pass
+
