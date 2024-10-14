@@ -89,6 +89,7 @@ class Game:
         # self.playplayer = await self.getpauseplayer()
         self.game_balls.append(new_ball)
         if self.redscore >= self.max_score or self.bluescore >= self.max_score:
+            self.winningteam = 'Red Won' if self.redscore > self.max_score else 'BLue Won'
             self.gamestatus = 'ended'
         # return new_ball
 

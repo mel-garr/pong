@@ -5,26 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplayer Game</title>
     <style>
+
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
         #gamecanvas{
+            display: block;
             height : 600px;
             width : 800px;
             border : 1px black solid;
-            background-color: grey;
+            /* background-color: grey; */
+        }
+
+        #newGamePlan{
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* transform: translate(-50%, -50%); */
+            /* background-color: rgba(255, 255, 255, 0.9); */
+            padding: 20px;
+            border: 1px solid black;
+            text-align: center;
+            z-index: 10; 
+        }
+
+        .blurred {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+
+        #currentGamePlan{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            /* display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; */
         }
 
     </style>
 </head>
 <body>
-    <h1>Welcome to the game room: {{ room_id }}</h1>
-    <p>Room ID: {{ room_id}}</p>
-    <p>player 1  name :{{P1.name}}, up is : {{P1.keys.keyup}} and down is {{P1.keys.keydown}}</p>
-    <p>player 2  name :{{P2.name}}, up is : {{P2.keys.keyup}} and down is {{P2.keys.keydown}}</p>
-    <p> </p>
-    <input type="text" id="messageInput" placeholder="Type a message" />
-    <button onclick="sendMessage()">Send Message</button>
+    <div id="currentGamePlan">
+        <div id="oldgamedata">
+            <h1>Welcome to the game room: {{ room_id }}</h1>
+            <p>Room ID: {{ room_id}}</p>
+            <p>player 1  name :{{P1.name}}, up is : {{P1.keys.keyup}} and down is {{P1.keys.keydown}}</p>
+            <p>player 2  name :{{P2.name}}, up is : {{P2.keys.keyup}} and down is {{P2.keys.keydown}}</p>
+            <p> </p>
+            <input type="text" id="messageInput" placeholder="Type a message" />
+            <button onclick="sendMessage()">Send Message</button>
+            <canvas id="gamecanvas" ></canvas>
+        </div>
+        <div id="newGamePlan" >
+            <p class="gameData"> Winner is : </p>
+            <button>New Game</button>
+            <button>Go back</button>
+        </div>
+    </div>
 
 
-    <canvas id="gamecanvas" ></canvas>
 
     <script type="text/javascript">
         const canvas = document.querySelector('#gamecanvas');
@@ -36,12 +80,21 @@
         // Handle incoming messages
         sockett.onmessage = function(event) {
             const data = JSON.parse(event.data);
-            // console.log('jq hnq')
-            // console.log("Message from server:", data);
             update_game(data);
         };
+        // console.log('jq hnq')
+        // console.log("Message from server:", data);
         
         function update_game(data){
+            // console.log(data.status);
+            if (data.status === 'ended'){
+                // console.log(data.status);
+                const GDD = document.querySelector('.gameData')
+                GDD.innerHTML = data.winningteam ;
+                document.querySelector('#oldgamedata').classList.add('blurred');
+                document.querySelector('#newGamePlan').style.display = 'block';
+            
+            }
             ctx.clearRect(0, 0, canvas.width , canvas.height);
             ctx.fillStyle = data.redfield.color;
             ctx.fillRect(0, 0, data.redfield.width, data.redfield.height);
